@@ -40,6 +40,7 @@ main.py            # 联邦实验入口
   dataset.py       # 缺失掩码/难度分数/Dirichlet 划分/reg_ts 前向填充
   fed.py           # 联邦训练循环(Eq.6-8: FedAvg聚合+先验参考+δ插值+课程学习)
   metrics.py       # AUC/AUPRC; micro/macro AP & AUC
+  diagnose.py      # 按模态完整度(完整/缺ts/缺txt)拆分评估 checkpoint
 ```
 
 ## 方法实现要点(对照论文)
@@ -102,3 +103,24 @@ python summarize.py                                  # 汇总结果表
 ```
 
 ### 运行(本机)
+
+```bash
+PY=/opt/anaconda3/envs/active-learning/bin/python
+$PY main.py --task ihm --method fedcma          # 完整实验(~10 分钟)
+$PY main.py --task ihm --method fedcma --smoke    # 冒烟
+$PY summarize.py                                  # 汇总结果表
+```
+
+### 调优/诊断
+
+```bash
+# 保存 best-val 轮的模型与先验, 再按模态完整度拆分诊断
+$PY main.py --task ihm --method fedcma --save_ckpt 1
+$PY diagnose.py runs/ihm_fedcma.ckpt
+# 可调: --lambda_align --lambda_align_ts --lambda_reg --align_detach
+#       --xi --rho0 --delta0 --delta_max --num_clients --dir_alpha
+```
+
+子集诊断结论(默认配置): 伪特征在"缺文本"子集 AUPRC +0.025; 在"缺时序"
+子集略负(ts 特征方差大, 客户端常数先验难跟踪), 整体增益因此受限;
+`--lambda_align_ts` 可加大时序侧对齐权重。

@@ -35,7 +35,8 @@ def priors_for(model, batch, p_ts, p_txt, device):
 
 
 @torch.no_grad()
-def evaluate(model, loader, device, task, p_ts=None, p_txt=None):
+def predict_all(model, loader, device, task, p_ts=None, p_txt=None):
+    """Returns (y, scores) over the loader; p_ts None -> zero-feature handling."""
     model.eval()
     ys, ss = [], []
     for batch in loader:
@@ -47,8 +48,13 @@ def evaluate(model, loader, device, task, p_ts=None, p_txt=None):
             priors = priors_for(model, batch, p_ts, p_txt, device)
             scores = model.predict(batch, priors, use_priors=True)
         ys.append(batch["label"].cpu().numpy())
-        ss.append(scores.cpu().numpy())
-    return compute_metrics(np.concatenate(ys), np.concatenate(ss), task)
+        ss.append(scores.float().cpu().numpy())
+    return np.concatenate(ys), np.concatenate(ss)
+
+
+def evaluate(model, loader, device, task, p_ts=None, p_txt=None):
+    y, s = predict_all(model, loader, device, task, p_ts, p_txt)
+    return compute_metrics(y, s, task)
 
 
 def run_fed(cfg, seed=42, log=print):
@@ -145,8 +151,10 @@ def run_fed(cfg, seed=42, log=print):
         ref = (pbar[0], pbar[1]) if use_priors else (None, None)
         val_metrics = evaluate(global_model, loaders["val"], device, cfg.task, *ref)
 
-        # personalized client-local test evaluation
-        per_client, weights = [], []
+        # personalized inference: each client predicts its own test shard with
+        # its own priors; metrics are computed pooled over all shards (avoids
+        # undefined AUC on single-label client shards under strong heterogeneity)
+        ys, ss = [], []
         for k in range(K):
             idx = np.where(datasets["test"].client == k)[0]
             if len(idx) == 0:
@@ -154,9 +162,11 @@ def run_fed(cfg, seed=42, log=print):
             sub = torch.utils.data.Subset(datasets["test"], idx.tolist())
             loader = DataLoader(sub, cfg.batch_size, collate_fn=collate)
             pk = (priors[k][0], priors[k][1]) if use_priors else (None, None)
-            per_client.append(evaluate(global_model, loader, device, cfg.task, *pk))
-            weights.append(len(idx))
-        pers_metrics = weighted_average(per_client, weights)
+            y, s = predict_all(global_model, loader, device, cfg.task, *pk)
+            ys.append(y)
+            ss.append(s)
+        pers_metrics = compute_metrics(np.concatenate(ys), np.concatenate(ss),
+                                       cfg.task)
         glob_metrics = evaluate(global_model, loaders["test"], device, cfg.task, *ref)
 
         sel = "auprc" if cfg.task == "ihm" else "micro_ap"
@@ -170,5 +180,20 @@ def run_fed(cfg, seed=42, log=print):
         if val_metrics[sel] > best["val"]:
             best = {"val": val_metrics[sel], "round": t,
                     "test_personalized": pers_metrics, "test_global": glob_metrics}
+            if getattr(cfg, "save_ckpt", False):
+                best["ckpt"] = {
+                    "config": vars(cfg),
+                    "model": {k: v.cpu().clone() for k, v in global_model.state_dict().items()},
+                    "priors_ref": pbar.cpu().clone() if use_priors else None,
+                    "priors_clients": torch.stack([p.cpu() for p in priors]) if use_priors else None,
+                }
 
+    if getattr(cfg, "save_ckpt", False) and "ckpt" in best:
+        ckpt_path = os.path.join(cfg.out_dir,
+                                 f"{cfg.task}_{cfg.method}"
+                                 + (f"_{cfg.tag}" if getattr(cfg, 'tag', '') else "")
+                                 + ".ckpt")
+        torch.save(best["ckpt"], ckpt_path)
+        best["ckpt_path"] = ckpt_path
+    best.pop("ckpt", None)
     return {"history": history, "best": best}

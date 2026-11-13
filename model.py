@@ -132,9 +132,13 @@ class FedCMAModel(nn.Module):
                 detach = bool(getattr(cfg, "align_detach", 1))
                 h_ts_a = h_ts.detach() if detach else h_ts
                 h_txt_a = h_txt.detach() if detach else h_txt
-                l_align = (complete * (F.mse_loss(gen_ts, h_ts_a, reduction="none").mean(-1)
+                # ts-side alignment can be weighted higher: ts features are
+                # higher-variance than frozen-BERT text features, so the
+                # generator needs a stronger pull to track them
+                w_ts = float(getattr(cfg, "lambda_align_ts", 1.0))
+                l_align = (complete * (w_ts * F.mse_loss(gen_ts, h_ts_a, reduction="none").mean(-1)
                                        + F.mse_loss(gen_txt, h_txt_a, reduction="none").mean(-1))).sum() \
-                    / (2 * complete.sum())
+                    / ((1 + w_ts) * complete.sum())
                 loss = loss + cfg.lambda_align * l_align
                 out["align"] = l_align.detach()
             l_reg = p_ts.pow(2).mean() + p_txt.pow(2).mean()

@@ -40,3 +40,66 @@ Traceback (most recent call last):
     ds = FLDataset(cfg.task, split, data_dir, cfg, tokenizer=tokenizer)
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: FLDataset.__init__() got an unexpected keyword argument 'tokenizer'
+usage: main.py [-h] [--task {ihm,pheno}] [--method METHOD] [--seed SEED]
+               [--num_clients NUM_CLIENTS] [--dir_alpha DIR_ALPHA]
+               [--rounds ROUNDS] [--local_epochs LOCAL_EPOCHS] [--q Q]
+               [--mask_seed MASK_SEED] [--partition_seed PARTITION_SEED]
+               [--embed_dim EMBED_DIM] [--embed_time EMBED_TIME]
+               [--num_heads NUM_HEADS] [--layers LAYERS] [--dropout DROPOUT]
+               [--lr LR] [--batch_size BATCH_SIZE] [--mu MU]
+               [--lambda_align LAMBDA_ALIGN] [--lambda_reg LAMBDA_REG]
+               [--align_detach ALIGN_DETACH] [--xi XI] [--rho0 RHO0]
+               [--delta0 DELTA0] [--delta_max DELTA_MAX] [--device DEVICE]
+               [--smoke] [--tag TAG] [--data_dir DATA_DIR] [--out_dir OUT_DIR]
+main.py: error: argument --lambda_align: invalid float value: '1.0 0.6'
+usage: main.py [-h] [--task {ihm,pheno}] [--method METHOD] [--seed SEED]
+               [--num_clients NUM_CLIENTS] [--dir_alpha DIR_ALPHA]
+               [--rounds ROUNDS] [--local_epochs LOCAL_EPOCHS] [--q Q]
+               [--mask_seed MASK_SEED] [--partition_seed PARTITION_SEED]
+               [--embed_dim EMBED_DIM] [--embed_time EMBED_TIME]
+               [--num_heads NUM_HEADS] [--layers LAYERS] [--dropout DROPOUT]
+               [--lr LR] [--batch_size BATCH_SIZE] [--mu MU]
+               [--lambda_align LAMBDA_ALIGN] [--lambda_reg LAMBDA_REG]
+               [--align_detach ALIGN_DETACH] [--xi XI] [--rho0 RHO0]
+               [--delta0 DELTA0] [--delta_max DELTA_MAX] [--device DEVICE]
+               [--smoke] [--tag TAG] [--data_dir DATA_DIR] [--out_dir OUT_DIR]
+main.py: error: argument --lambda_align: invalid float value: '2.0 0.4'
+usage: main.py [-h] [--task {ihm,pheno}] [--method METHOD] [--seed SEED]
+               [--num_clients NUM_CLIENTS] [--dir_alpha DIR_ALPHA]
+               [--rounds ROUNDS] [--local_epochs LOCAL_EPOCHS] [--q Q]
+               [--mask_seed MASK_SEED] [--partition_seed PARTITION_SEED]
+               [--embed_dim EMBED_DIM] [--embed_time EMBED_TIME]
+               [--num_heads NUM_HEADS] [--layers LAYERS] [--dropout DROPOUT]
+               [--lr LR] [--batch_size BATCH_SIZE] [--mu MU]
+               [--lambda_align LAMBDA_ALIGN] [--lambda_reg LAMBDA_REG]
+               [--align_detach ALIGN_DETACH] [--xi XI] [--rho0 RHO0]
+               [--delta0 DELTA0] [--delta_max DELTA_MAX] [--device DEVICE]
+               [--smoke] [--tag TAG] [--data_dir DATA_DIR] [--out_dir OUT_DIR]
+main.py: error: argument --lambda_align: invalid float value: '2.0 0.6'
+[20:50:43] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'lambda_align': 1.0, 'lambda_reg': 0.001, 'align_detach': 1, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 0.6, 'device': 'mps', 'smoke': False, 'tag': 's1_la1.0_dm0.6', 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+/Volumes/TiPlus7100s/论文/fedpt/FedCMA/module.py:82: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+[20:52:35] [fedcma/ihm] r0 rho=0.60 delta=0.20 val={'auc': 0.7607700214933184, 'auprc': 0.40143354374035267} test_pers[auprc]=0.3214 (1.8m)
+[20:54:36] [fedcma/ihm] r1 rho=0.70 delta=0.30 val={'auc': 0.753013737033922, 'auprc': 0.416999019212378} test_pers[auprc]=0.3373 (3.9m)
+[20:56:50] [fedcma/ihm] r2 rho=0.80 delta=0.40 val={'auc': 0.7242313802448369, 'auprc': 0.37014367008121785} test_pers[auprc]=0.3351 (6.1m)
+[20:59:24] [fedcma/ihm] r3 rho=0.90 delta=0.50 val={'auc': 0.6660592467993646, 'auprc': 0.2917362112074921} test_pers[auprc]=0.3292 (8.7m)
+[21:02:37] [fedcma/ihm] r4 rho=1.00 delta=0.60 val={'auc': 0.6754508924399589, 'auprc': 0.3122246120597598} test_pers[auprc]=0.3201 (11.9m)
+[21:02:37] best: {"val": 0.416999019212378, "round": 1, "test_personalized": {"auc": 0.7235254006336966, "auprc": 0.33733273949810005}, "test_global": {"auc": 0.7174827045828078, "auprc": 0.31147942097657655}}
+[21:02:41] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'lambda_align': 2.0, 'lambda_reg': 0.001, 'align_detach': 1, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 0.4, 'device': 'mps', 'smoke': False, 'tag': 's1_la2.0_dm0.4', 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+/Volumes/TiPlus7100s/论文/fedpt/FedCMA/module.py:82: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+[21:04:28] [fedcma/ihm] r0 rho=0.60 delta=0.20 val={'auc': 0.7599289786001309, 'auprc': 0.40021457694974083} test_pers[auprc]=0.3283 (1.7m)
+[21:06:30] [fedcma/ihm] r1 rho=0.70 delta=0.25 val={'auc': 0.7413793103448276, 'auprc': 0.3968068180260537} test_pers[auprc]=0.3331 (3.8m)
+[21:08:48] [fedcma/ihm] r2 rho=0.80 delta=0.30 val={'auc': 0.7315671432576395, 'auprc': 0.40211734571021185} test_pers[auprc]=0.3412 (6.1m)
+[21:11:33] [fedcma/ihm] r3 rho=0.90 delta=0.35 val={'auc': 0.6855901317633866, 'auprc': 0.3498055482393873} test_pers[auprc]=0.3390 (8.8m)
+[21:14:50] [fedcma/ihm] r4 rho=1.00 delta=0.40 val={'auc': 0.6807774974301467, 'auprc': 0.32068506747287934} test_pers[auprc]=0.3342 (12.1m)
+[21:14:50] best: {"val": 0.40211734571021185, "round": 2, "test_personalized": {"auc": 0.7232845033357245, "auprc": 0.34124818581728594}, "test_global": {"auc": 0.7059524264546625, "auprc": 0.31285954532980703}}
+[21:14:55] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'lambda_align': 2.0, 'lambda_reg': 0.001, 'align_detach': 1, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 0.6, 'device': 'mps', 'smoke': False, 'tag': 's1_la2.0_dm0.6', 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+/Volumes/TiPlus7100s/论文/fedpt/FedCMA/module.py:82: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+[21:16:42] [fedcma/ihm] r0 rho=0.60 delta=0.20 val={'auc': 0.7599289786001309, 'auprc': 0.40021457694974083} test_pers[auprc]=0.3283 (1.7m)
+[21:18:40] [fedcma/ihm] r1 rho=0.70 delta=0.30 val={'auc': 0.7413793103448276, 'auprc': 0.3968068180260537} test_pers[auprc]=0.3323 (3.7m)
+[21:21:01] [fedcma/ihm] r2 rho=0.80 delta=0.40 val={'auc': 0.7321278385197645, 'auprc': 0.39062975182405346} test_pers[auprc]=0.3448 (6.0m)
+[21:23:40] [fedcma/ihm] r3 rho=0.90 delta=0.50 val={'auc': 0.6939538360900851, 'auprc': 0.36212066339236176} test_pers[auprc]=0.3272 (8.7m)
+[21:26:52] [fedcma/ihm] r4 rho=1.00 delta=0.60 val={'auc': 0.6639099149612185, 'auprc': 0.2732995491017269} test_pers[auprc]=0.3147 (11.9m)
+[21:26:52] best: {"val": 0.40021457694974083, "round": 0, "test_personalized": {"auc": 0.7140633475491246, "auprc": 0.3283048213391779}, "test_global": {"auc": 0.7098892838486922, "auprc": 0.315073035046006}}

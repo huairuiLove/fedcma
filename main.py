@@ -47,6 +47,8 @@ def get_cfg(argv=None):
     # FedCMA-specific (choices documented in README; paper gives no values)
     p.add_argument("--lambda_align", type=float, default=0.5)
     p.add_argument("--lambda_reg", type=float, default=1e-3)
+    p.add_argument("--lambda_align_ts", type=float, default=1.0,
+                   help="relative weight of the ts side in L_align")
     p.add_argument("--align_detach", type=int, default=1,
                    help="1: align loss trains generator only (h detached); "
                         "0: also pulls encoders toward prior features")
@@ -58,6 +60,8 @@ def get_cfg(argv=None):
     p.add_argument("--device", default=None)
     p.add_argument("--smoke", action="store_true")
     p.add_argument("--tag", default="", help="suffix appended to output filenames")
+    p.add_argument("--save_ckpt", type=int, default=0,
+                   help="save model+priors at best-val round to runs/*.ckpt")
     p.add_argument("--data_dir", default=os.path.join(os.path.dirname(
         os.path.abspath(__file__)), "data"))
     p.add_argument("--out_dir", default=os.path.join(os.path.dirname(
@@ -72,6 +76,7 @@ def get_cfg(argv=None):
     if cfg.smoke:
         cfg.rounds, cfg.local_epochs, cfg.num_clients = 2, 1, 2
     cfg.tag = (cfg.tag or "").strip()
+    cfg.save_ckpt = bool(cfg.save_ckpt)
     return cfg
 
 

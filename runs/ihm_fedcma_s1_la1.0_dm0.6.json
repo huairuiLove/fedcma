@@ -1,0 +1,141 @@
+{
+ "config": {
+  "task": "ihm",
+  "method": "fedcma",
+  "seed": 42,
+  "num_clients": 5,
+  "dir_alpha": 0.5,
+  "rounds": 5,
+  "local_epochs": 6,
+  "q": 0.5,
+  "mask_seed": 42,
+  "partition_seed": 42,
+  "embed_dim": 128,
+  "embed_time": 64,
+  "num_heads": 8,
+  "layers": 3,
+  "dropout": 0.1,
+  "lr": 0.0004,
+  "batch_size": 32,
+  "mu": 0.01,
+  "lambda_align": 1.0,
+  "lambda_reg": 0.001,
+  "align_detach": 1,
+  "xi": 0.5,
+  "rho0": 0.6,
+  "delta0": 0.2,
+  "delta_max": 0.6,
+  "device": "mps",
+  "smoke": false,
+  "tag": "s1_la1.0_dm0.6",
+  "data_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/data",
+  "out_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs",
+  "tt_max": 48,
+  "num_out": 2,
+  "d_ts": 17
+ },
+ "history": [
+  {
+   "round": 0,
+   "rho_t": 0.6,
+   "delta_t": 0.2,
+   "val": {
+    "auc": 0.7607700214933184,
+    "auprc": 0.40143354374035267
+   },
+   "test_personalized": {
+    "auc": 0.7082598197456882,
+    "auprc": 0.32140238362870616
+   },
+   "test_global": {
+    "auc": 0.7060097593293327,
+    "auprc": 0.3098958379912232
+   },
+   "min": 1.8350683530171712
+  },
+  {
+   "round": 1,
+   "rho_t": 0.7,
+   "delta_t": 0.3,
+   "val": {
+    "auc": 0.753013737033922,
+    "auprc": 0.416999019212378
+   },
+   "test_personalized": {
+    "auc": 0.7235254006336966,
+    "auprc": 0.33733273949810005
+   },
+   "test_global": {
+    "auc": 0.7174827045828078,
+    "auprc": 0.31147942097657655
+   },
+   "min": 3.8617270827293395
+  },
+  {
+   "round": 2,
+   "rho_t": 0.8,
+   "delta_t": 0.4,
+   "val": {
+    "auc": 0.7242313802448369,
+    "auprc": 0.37014367008121785
+   },
+   "test_personalized": {
+    "auc": 0.7228688933047298,
+    "auprc": 0.33512004850945687
+   },
+   "test_global": {
+    "auc": 0.7093159551019889,
+    "auprc": 0.3106964658364427
+   },
+   "min": 6.081302869319916
+  },
+  {
+   "round": 3,
+   "rho_t": 0.9,
+   "delta_t": 0.5,
+   "val": {
+    "auc": 0.6660592467993646,
+    "auprc": 0.2917362112074921
+   },
+   "test_personalized": {
+    "auc": 0.7153413950907777,
+    "auprc": 0.3291760881396236
+   },
+   "test_global": {
+    "auc": 0.6996904024767802,
+    "auprc": 0.2933516022673084
+   },
+   "min": 8.65627678235372
+  },
+  {
+   "round": 4,
+   "rho_t": 1.0,
+   "delta_t": 0.6,
+   "val": {
+    "auc": 0.6754508924399589,
+    "auprc": 0.3122246120597598
+   },
+   "test_personalized": {
+    "auc": 0.7042319284727592,
+    "auprc": 0.3201195794449106
+   },
+   "test_global": {
+    "auc": 0.6928168278357477,
+    "auprc": 0.29166612496551886
+   },
+   "min": 11.865490869681041
+  }
+ ],
+ "best": {
+  "val": 0.416999019212378,
+  "round": 1,
+  "test_personalized": {
+   "auc": 0.7235254006336966,
+   "auprc": 0.33733273949810005
+  },
+  "test_global": {
+   "auc": 0.7174827045828078,
+   "auprc": 0.31147942097657655
+  }
+ }
+}

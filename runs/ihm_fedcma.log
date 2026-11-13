@@ -5,3 +5,10 @@
 [17:27:58] [fedcma/ihm] r3 rho=0.90 delta=0.80 val={'auc': 0.6779740211195215, 'auprc': 0.3223588148713818} test_pers[auprc]=0.3079 (7.5m)
 [17:30:36] [fedcma/ihm] r4 rho=1.00 delta=1.00 val={'auc': 0.6740024296794692, 'auprc': 0.2606436623676147} test_pers[auprc]=0.2839 (10.1m)
 [17:30:36] best: {"val": 0.41265927130066316, "round": 1, "test_personalized": {"auc": 0.7241714574743021, "auprc": 0.339690505910187}, "test_global": {"auc": 0.7188268419778567, "auprc": 0.3178638858239485}}
+[21:45:34] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'lambda_align': 0.5, 'lambda_reg': 0.001, 'align_detach': 1, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 1.0, 'device': 'mps', 'smoke': False, 'tag': '', 'save_ckpt': True, 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+[21:47:21] [fedcma/ihm] r0 rho=0.60 delta=0.20 val={'auc': 0.7617979628072143, 'auprc': 0.4059238322720535} test_pers[auprc]=0.3277 (1.7m)
+[21:49:16] [fedcma/ihm] r1 rho=0.70 delta=0.40 val={'auc': 0.7596953555742454, 'auprc': 0.41265927130066316} test_pers[auprc]=0.3397 (3.6m)
+[21:51:31] [fedcma/ihm] r2 rho=0.80 delta=0.60 val={'auc': 0.726988131950285, 'auprc': 0.39316031301636745} test_pers[auprc]=0.3318 (5.9m)
+[21:54:05] [fedcma/ihm] r3 rho=0.90 delta=0.80 val={'auc': 0.6779740211195215, 'auprc': 0.3223588148713818} test_pers[auprc]=0.3079 (8.5m)
+[21:57:06] [fedcma/ihm] r4 rho=1.00 delta=1.00 val={'auc': 0.6740024296794692, 'auprc': 0.2606436623676147} test_pers[auprc]=0.2839 (11.5m)
+[21:57:07] best: {"val": 0.41265927130066316, "round": 1, "test_personalized": {"auc": 0.7241714574743021, "auprc": 0.339690505910187}, "test_global": {"auc": 0.7188268419778567, "auprc": 0.3178638858239485}, "ckpt_path": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs/ihm_fedcma.ckpt"}
