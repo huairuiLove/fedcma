@@ -1,0 +1,178 @@
+{
+ "config": {
+  "task": "pheno",
+  "method": "fedavg",
+  "seed": 42,
+  "num_clients": 8,
+  "dir_alpha": 0.5,
+  "rounds": 5,
+  "local_epochs": 6,
+  "q": 0.5,
+  "mask_seed": 42,
+  "partition_seed": 42,
+  "embed_dim": 128,
+  "embed_time": 64,
+  "num_heads": 8,
+  "layers": 3,
+  "dropout": 0.1,
+  "lr": 0.0004,
+  "batch_size": 32,
+  "mu": 0.01,
+  "lambda_align": 0.5,
+  "lambda_reg": 0.001,
+  "lambda_align_ts": 1.0,
+  "align_detach": 1,
+  "xi": 0.5,
+  "rho0": 0.6,
+  "delta0": 0.2,
+  "delta_max": 1.0,
+  "device": "mps",
+  "smoke": false,
+  "tag": "f_k8",
+  "save_ckpt": true,
+  "data_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/data",
+  "out_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs",
+  "tt_max": 24,
+  "num_out": 25,
+  "d_ts": 17
+ },
+ "history": [
+  {
+   "round": 0,
+   "rho_t": 1.0,
+   "delta_t": 0.2,
+   "val": {
+    "micro_ap": 0.43028441198674283,
+    "micro_auc": 0.7359060371914772,
+    "macro_ap": 0.337097791299361,
+    "macro_auc": 0.6503914163355485
+   },
+   "test_personalized": {
+    "micro_ap": 0.4325751716530973,
+    "micro_auc": 0.7366463084745359,
+    "macro_ap": 0.32991290811166735,
+    "macro_auc": 0.6388967385320113
+   },
+   "test_global": {
+    "micro_ap": 0.4325751716530973,
+    "micro_auc": 0.7366463084745359,
+    "macro_ap": 0.32991290811166735,
+    "macro_auc": 0.6388967385320113
+   },
+   "min": 1.8162562171618144
+  },
+  {
+   "round": 1,
+   "rho_t": 1.0,
+   "delta_t": 0.4,
+   "val": {
+    "micro_ap": 0.45158895641506286,
+    "micro_auc": 0.7478364331878788,
+    "macro_ap": 0.35878853729037175,
+    "macro_auc": 0.664552841121946
+   },
+   "test_personalized": {
+    "micro_ap": 0.4502313311073479,
+    "micro_auc": 0.7466506515432111,
+    "macro_ap": 0.34834544483994845,
+    "macro_auc": 0.660881794595332
+   },
+   "test_global": {
+    "micro_ap": 0.45023131379022857,
+    "micro_auc": 0.7466506515432111,
+    "macro_ap": 0.34834544483994845,
+    "macro_auc": 0.660881794595332
+   },
+   "min": 3.5946335832277936
+  },
+  {
+   "round": 2,
+   "rho_t": 1.0,
+   "delta_t": 0.6,
+   "val": {
+    "micro_ap": 0.45065419164809506,
+    "micro_auc": 0.745637285124625,
+    "macro_ap": 0.36754228463611727,
+    "macro_auc": 0.6662896032552063
+   },
+   "test_personalized": {
+    "micro_ap": 0.44955409026159865,
+    "micro_auc": 0.7449558787126916,
+    "macro_ap": 0.35094908773251277,
+    "macro_auc": 0.6636169252840561
+   },
+   "test_global": {
+    "micro_ap": 0.44955410067814716,
+    "micro_auc": 0.7449558787126916,
+    "macro_ap": 0.35094908773251277,
+    "macro_auc": 0.6636169252840561
+   },
+   "min": 5.375159382820129
+  },
+  {
+   "round": 3,
+   "rho_t": 1.0,
+   "delta_t": 0.8,
+   "val": {
+    "micro_ap": 0.4476005546159485,
+    "micro_auc": 0.7446356280549294,
+    "macro_ap": 0.3663711728099108,
+    "macro_auc": 0.6651076160368993
+   },
+   "test_personalized": {
+    "micro_ap": 0.4377240067384378,
+    "micro_auc": 0.7400357216404825,
+    "macro_ap": 0.3448924713184912,
+    "macro_auc": 0.6598075377015057
+   },
+   "test_global": {
+    "micro_ap": 0.43772403145902655,
+    "micro_auc": 0.7400357236479839,
+    "macro_ap": 0.3448925500194182,
+    "macro_auc": 0.6598075777636019
+   },
+   "min": 7.152453049023946
+  },
+  {
+   "round": 4,
+   "rho_t": 1.0,
+   "delta_t": 1.0,
+   "val": {
+    "micro_ap": 0.43511817060692504,
+    "micro_auc": 0.7361853176209717,
+    "macro_ap": 0.3564125155378283,
+    "macro_auc": 0.6561401977784542
+   },
+   "test_personalized": {
+    "micro_ap": 0.42754113165582447,
+    "micro_auc": 0.7308087092107685,
+    "macro_ap": 0.3374938885471994,
+    "macro_auc": 0.6487638328458631
+   },
+   "test_global": {
+    "micro_ap": 0.42754113585986514,
+    "micro_auc": 0.73080871121827,
+    "macro_ap": 0.3374938885471994,
+    "macro_auc": 0.6487638328458631
+   },
+   "min": 8.927158566315969
+  }
+ ],
+ "best": {
+  "val": 0.45158895641506286,
+  "round": 1,
+  "test_personalized": {
+   "micro_ap": 0.4502313311073479,
+   "micro_auc": 0.7466506515432111,
+   "macro_ap": 0.34834544483994845,
+   "macro_auc": 0.660881794595332
+  },
+  "test_global": {
+   "micro_ap": 0.45023131379022857,
+   "micro_auc": 0.7466506515432111,
+   "macro_ap": 0.34834544483994845,
+   "macro_auc": 0.660881794595332
+  },
+  "ckpt_path": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs/pheno_fedavg_f_k8.ckpt"
+ }
+}

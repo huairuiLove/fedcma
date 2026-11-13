@@ -1,0 +1,144 @@
+{
+ "config": {
+  "task": "ihm",
+  "method": "fedcma",
+  "seed": 42,
+  "num_clients": 5,
+  "dir_alpha": 0.5,
+  "rounds": 5,
+  "local_epochs": 6,
+  "q": 0.5,
+  "mask_seed": 42,
+  "partition_seed": 42,
+  "embed_dim": 128,
+  "embed_time": 64,
+  "num_heads": 8,
+  "layers": 3,
+  "dropout": 0.1,
+  "lr": 0.0004,
+  "batch_size": 32,
+  "mu": 0.01,
+  "lambda_align": 0.5,
+  "lambda_reg": 0.001,
+  "lambda_align_ts": 1.0,
+  "align_detach": 1,
+  "xi": 0.5,
+  "rho0": 0.6,
+  "delta0": 0.2,
+  "delta_max": 1.0,
+  "device": "mps",
+  "smoke": false,
+  "tag": "f_k5",
+  "save_ckpt": true,
+  "data_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/data",
+  "out_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs",
+  "tt_max": 48,
+  "num_out": 2,
+  "d_ts": 17
+ },
+ "history": [
+  {
+   "round": 0,
+   "rho_t": 0.6,
+   "delta_t": 0.2,
+   "val": {
+    "auc": 0.7617979628072143,
+    "auprc": 0.4059238322720535
+   },
+   "test_personalized": {
+    "auc": 0.7130425919555606,
+    "auprc": 0.31843025387829843
+   },
+   "test_global": {
+    "auc": 0.7082967039967384,
+    "auprc": 0.317432043178086
+   },
+   "min": 1.5245434323946634
+  },
+  {
+   "round": 1,
+   "rho_t": 0.7,
+   "delta_t": 0.4,
+   "val": {
+    "auc": 0.7596953555742454,
+    "auprc": 0.41265927130066316
+   },
+   "test_personalized": {
+    "auc": 0.7272866261514352,
+    "auprc": 0.3270062657867332
+   },
+   "test_global": {
+    "auc": 0.7188268419778567,
+    "auprc": 0.3178638858239485
+   },
+   "min": 3.2411629637082418
+  },
+  {
+   "round": 2,
+   "rho_t": 0.8,
+   "delta_t": 0.6,
+   "val": {
+    "auc": 0.726988131950285,
+    "auprc": 0.39316031301636745
+   },
+   "test_personalized": {
+    "auc": 0.7202537935252074,
+    "auprc": 0.32361512257199215
+   },
+   "test_global": {
+    "auc": 0.7080291505816101,
+    "auprc": 0.31117763834035583
+   },
+   "min": 5.168912935256958
+  },
+  {
+   "round": 3,
+   "rho_t": 0.9,
+   "delta_t": 0.8,
+   "val": {
+    "auc": 0.6779740211195215,
+    "auprc": 0.3223588148713818
+   },
+   "test_personalized": {
+    "auc": 0.69301430773739,
+    "auprc": 0.29066508781724776
+   },
+   "test_global": {
+    "auc": 0.684573634522035,
+    "auprc": 0.28122621385887636
+   },
+   "min": 7.367124716440837
+  },
+  {
+   "round": 4,
+   "rho_t": 1.0,
+   "delta_t": 1.0,
+   "val": {
+    "auc": 0.6740024296794692,
+    "auprc": 0.2606436623676147
+   },
+   "test_personalized": {
+    "auc": 0.6880327179604785,
+    "auprc": 0.2607314168446936
+   },
+   "test_global": {
+    "auc": 0.6880327179604785,
+    "auprc": 0.2607314168446936
+   },
+   "min": 9.90772176583608
+  }
+ ],
+ "best": {
+  "val": 0.41265927130066316,
+  "round": 1,
+  "test_personalized": {
+   "auc": 0.7272866261514352,
+   "auprc": 0.3270062657867332
+  },
+  "test_global": {
+   "auc": 0.7188268419778567,
+   "auprc": 0.3178638858239485
+  },
+  "ckpt_path": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs/ihm_fedcma_f_k5.ckpt"
+ }
+}
