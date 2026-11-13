@@ -1,0 +1,19 @@
+{
+  "batch": 3,
+  "label": "第三批",
+  "reference_experiment": "experiments/batch_02_ihm_20261113",
+  "seeds": [42, 43, 44],
+  "methods": ["fedavg", "fedprox", "fedcma", "fedcma_wo_prior", "fedcma_wo_cl", "fedcma_wo_both"],
+  "common_overrides": {
+    "curriculum_schedule": "stratified_order",
+    "warmup_rounds": 1,
+    "equal_training_budget": true
+  },
+  "validation_candidates": [
+    {"name": "strength025_recovery2", "curriculum_strength": 0.25, "full_data_rounds": 2},
+    {"name": "strength050_recovery2", "curriculum_strength": 0.5, "full_data_rounds": 2},
+    {"name": "strength025_recovery1", "curriculum_strength": 0.25, "full_data_rounds": 1},
+    {"name": "strength050_recovery1", "curriculum_strength": 0.5, "full_data_rounds": 1}
+  ],
+  "candidate_selection": "maximize minimum paired validation AP gain over no-curriculum across seeds; break ties by mean gain, then configured candidate order"
+}

@@ -1,0 +1,15 @@
+{
+  "batch": 2,
+  "label": "第二批",
+  "reference_main": "experiments/final_ihm_20261113",
+  "reference_ablation": "experiments/ablation_ihm_20261113",
+  "batch1_index": "experiments/batch_01/manifest.json",
+  "seeds": [42, 43, 44],
+  "methods": ["fedavg", "fedprox", "fedcma", "fedcma_wo_prior", "fedcma_wo_cl", "fedcma_wo_both"],
+  "overrides": {
+    "curriculum_schedule": "warmup_bounded",
+    "warmup_rounds": 1,
+    "rho0": 0.55,
+    "equal_training_budget": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "batch": 4,
+  "label": "第四批",
+  "reference_experiment": "experiments/batch_03_ihm_20261113",
+  "seeds": [42, 43, 44],
+  "methods": ["fedavg", "fedprox", "fedcma", "fedcma_wo_prior", "fedcma_wo_cl", "fedcma_wo_both"],
+  "common_overrides": {
+    "curriculum_schedule": "balanced_weight",
+    "equal_training_budget": true,
+    "full_data_rounds": 0,
+    "curriculum_strength": 0.0
+  },
+  "validation_candidates": [
+    {"name": "weight025_warmup1", "curriculum_weight_max": 0.25, "warmup_rounds": 1},
+    {"name": "weight050_warmup1", "curriculum_weight_max": 0.5, "warmup_rounds": 1},
+    {"name": "weight075_warmup1", "curriculum_weight_max": 0.75, "warmup_rounds": 1},
+    {"name": "weight025_warmup2", "curriculum_weight_max": 0.25, "warmup_rounds": 2},
+    {"name": "weight050_warmup2", "curriculum_weight_max": 0.5, "warmup_rounds": 2},
+    {"name": "weight075_warmup2", "curriculum_weight_max": 0.75, "warmup_rounds": 2}
+  ],
+  "candidate_selection": "maximize the minimum paired gain across all seeds and both best-validation AP and last-two-round mean-validation AP; break ties by their combined mean gain, then configured order"
+}

@@ -1,20 +1,17 @@
 #!/bin/bash
-# FedCMA 完整实验(两个任务 × FedAvg/FedCMA), 冻结 BioClinicalBERT 文本分支.
-# 用法: bash run_server.sh   (CPU/GPU 均可, 单 run 约 10-20 分钟)
+# Linux counterpart of run_local.ps1. Only the requested three methods.
 set -e
 PY=${PY:-python}
 
-for task in ihm pheno; do
-  for method in fedavg fedcma; do
-    $PY main.py --task $task --method $method
-  done
-done
-
-# 可选: 消融(论文 Table 2)与 FedProx
-# for method in fedcma_wo_prior fedcma_wo_cl fedprox; do
-#   for task in ihm pheno; do
-#     $PY main.py --task $task --method $method
-#   done
-# done
-
-$PY summarize.py
+"$PY" - <<'PY'
+import json, subprocess, sys
+from datetime import datetime
+from pathlib import Path
+root = Path.cwd()
+settings = json.loads((root / 'configs/local_ihm.json').read_text())
+command = [sys.executable, '-u', 'run_experiments.py', '--out_dir',
+           str(root / 'experiments' / datetime.now().strftime('local_%Y%m%d_%H%M%S'))]
+for key, value in settings.items():
+    command += ['--' + key] + [str(x) for x in (value if isinstance(value, list) else [value])]
+subprocess.run(command, check=True)
+PY

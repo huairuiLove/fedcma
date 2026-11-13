@@ -1,99 +1,68 @@
-"""FedCMA reproduction entry point.
-
-Usage:
-  python main.py --task ihm --method fedcma
-  python main.py --task ihm --method fedcma --smoke   # tiny smoke run
-Methods: fedavg | fedprox | fedcma | fedcma_wo_prior | fedcma_wo_cl
-"""
-import argparse
-import json
+"""Run one auditable local IHM experiment; run_experiments.py runs the suite."""
 import os
-import time
-
-import numpy as np
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+import argparse
+from pathlib import Path
 import torch
-
-from fed import run_fed
-
-TASK_SETTINGS = {
-    # ihm: 48h in-hospital mortality, 2-class CE; pheno: 24h phenotyping, 25 labels
-    "ihm": {"tt_max": 48, "num_out": 2, "d_ts": 17},
-    "pheno": {"tt_max": 24, "num_out": 25, "d_ts": 17},
-}
+from methods import METHODS
 
 
 def get_cfg(argv=None):
     p = argparse.ArgumentParser()
-    p.add_argument("--task", choices=["ihm", "pheno"], default="ihm")
-    p.add_argument("--method", default="fedcma")
+    p.add_argument("--method", choices=list(METHODS), default="fedcma")
+    p.add_argument("--prepared", type=Path, required=True)
+    p.add_argument("--out_dir", type=Path, required=True)
     p.add_argument("--seed", type=int, default=42)
-    # federation (paper Sec. 4.1)
     p.add_argument("--num_clients", type=int, default=5)
-    p.add_argument("--dir_alpha", type=float, default=0.5)
     p.add_argument("--rounds", type=int, default=5)
-    p.add_argument("--local_epochs", type=int, default=6)
-    p.add_argument("--q", type=float, default=0.5, help="per-modality missing rate")
-    p.add_argument("--mask_seed", type=int, default=42)
-    p.add_argument("--partition_seed", type=int, default=42)
-    # backbone defaults (MultimodalMIMIC run.sh)
+    p.add_argument("--local_epochs", type=int, default=3)
+    p.add_argument("--batch_size", type=int, default=64)
+    p.add_argument("--lr", type=float, default=1e-3)
+    p.add_argument("--mu", type=float, default=0.01)
     p.add_argument("--embed_dim", type=int, default=128)
-    p.add_argument("--embed_time", type=int, default=64)
-    p.add_argument("--num_heads", type=int, default=8)
-    p.add_argument("--layers", type=int, default=3)
+    p.add_argument("--hidden_dim", type=int, default=64)
+    p.add_argument("--prior_hidden", type=int, default=64)
+    p.add_argument("--num_heads", type=int, default=4)
     p.add_argument("--dropout", type=float, default=0.1)
-    p.add_argument("--lr", type=float, default=4e-4)
-    p.add_argument("--batch_size", type=int, default=32)
-    p.add_argument("--mu", type=float, default=0.01, help="FedProx prox weight")
-    # FedCMA-specific (choices documented in README; paper gives no values)
-    p.add_argument("--lambda_align", type=float, default=0.5)
-    p.add_argument("--lambda_reg", type=float, default=1e-3)
-    p.add_argument("--align_detach", type=int, default=1,
-                   help="1: align loss trains generator only (h detached); "
-                        "0: also pulls encoders toward prior features")
-    p.add_argument("--xi", type=float, default=0.5, help="difficulty mix")
-    p.add_argument("--rho0", type=float, default=0.6, help="curriculum start fraction")
-    p.add_argument("--delta0", type=float, default=0.2, help="prior mixing start")
-    p.add_argument("--delta_max", type=float, default=1.0,
-                   help="prior mixing cap; delta_t: delta0 -> delta_max")
-    p.add_argument("--device", default=None)
-    p.add_argument("--smoke", action="store_true")
-    p.add_argument("--tag", default="", help="suffix appended to output filenames")
-    p.add_argument("--data_dir", default=os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), "data"))
-    p.add_argument("--out_dir", default=os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), "runs"))
+    p.add_argument("--lambda_align", type=float, default=0.001)
+    p.add_argument("--lambda_reg", type=float, default=0.001)
+    p.add_argument("--align_detach", action="store_true")
+    p.add_argument("--xi", type=float, default=0.7)
+    p.add_argument("--rho0", type=float, default=0.5)
+    p.add_argument("--curriculum_schedule", choices=("legacy", "warmup_bounded", "stratified_order", "balanced_weight"), default="legacy")
+    p.add_argument("--warmup_rounds", type=int, default=1)
+    p.add_argument("--full_data_rounds", type=int, default=2)
+    p.add_argument("--curriculum_strength", type=float, default=0.5)
+    p.add_argument("--curriculum_weight_max", type=float, default=0.5)
+    p.add_argument("--equal_training_budget", action="store_true")
+    p.add_argument("--delta0", type=float, default=0.2)
+    p.add_argument("--delta_max", type=float, default=0.6)
+    p.add_argument("--grad_clip", type=float, default=5.)
+    p.add_argument("--threads", type=int, default=4)
+    p.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
+    p.add_argument("--validation_only", action="store_true")
     cfg = p.parse_args(argv)
-    ts = TASK_SETTINGS[cfg.task]
-    for k, v in ts.items():
-        setattr(cfg, k, v)
-    if cfg.device is None:
-        cfg.device = ("cuda" if torch.cuda.is_available()
-                      else "mps" if torch.backends.mps.is_available() else "cpu")
-    if cfg.smoke:
-        cfg.rounds, cfg.local_epochs, cfg.num_clients = 2, 1, 2
-    cfg.tag = (cfg.tag or "").strip()
+    if min(cfg.rounds, cfg.local_epochs, cfg.batch_size, cfg.num_clients, cfg.threads) <= 0:
+        p.error("Training counts must be positive")
+    if cfg.embed_dim % cfg.num_heads:
+        p.error("embed_dim must be divisible by num_heads")
+    if not all(0 <= x <= 1 for x in (cfg.xi, cfg.rho0, cfg.delta0, cfg.delta_max)):
+        p.error("xi, rho0, delta0, delta_max must be in [0,1]")
+    if cfg.delta0 > cfg.delta_max or cfg.lr <= 0 or min(cfg.mu, cfg.lambda_align, cfg.lambda_reg) < 0:
+        p.error("Invalid optimizer or loss weights")
+    if cfg.curriculum_schedule == "warmup_bounded" and not 0 <= cfg.warmup_rounds < cfg.rounds:
+        p.error("warmup_rounds must be nonnegative and smaller than rounds")
+    if cfg.curriculum_schedule == "stratified_order":
+        if cfg.warmup_rounds < 0 or cfg.full_data_rounds < 1 or cfg.warmup_rounds + cfg.full_data_rounds >= cfg.rounds:
+            p.error("Ordering curriculum needs nonnegative warmup, positive recovery, and at least one active round")
+        if not 0 <= cfg.curriculum_strength <= 1:
+            p.error("curriculum_strength must be in [0,1]")
+    if cfg.curriculum_schedule == "balanced_weight":
+        if not 0 <= cfg.warmup_rounds < cfg.rounds or not 0 <= cfg.curriculum_weight_max < 1:
+            p.error("Weight curriculum requires valid warmup and curriculum_weight_max in [0,1)")
     return cfg
 
 
-def main():
-    cfg = get_cfg()
-    tag = f"{cfg.task}_{cfg.method}" + (f"_{cfg.tag}" if cfg.tag else "") \
-        + ("_smoke" if cfg.smoke else "")
-    os.makedirs(cfg.out_dir, exist_ok=True)
-    log_path = os.path.join(cfg.out_dir, tag + ".log")
-
-    def log(msg):
-        line = f"[{time.strftime('%H:%M:%S')}] {msg}"
-        print(line, flush=True)
-        with open(log_path, "a") as f:
-            f.write(line + "\n")
-
-    log(f"config: {vars(cfg)}")
-    result = run_fed(cfg, seed=cfg.seed, log=log)
-    log(f"best: {json.dumps(result['best'])}")
-    with open(os.path.join(cfg.out_dir, tag + ".json"), "w") as f:
-        json.dump({"config": vars(cfg), **result}, f, indent=1)
-
-
 if __name__ == "__main__":
-    main()
+    from fed import run_fed
+    run_fed(get_cfg())

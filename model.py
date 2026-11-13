@@ -1,151 +1,89 @@
-"""FedCMA model: MultimodalMIMIC-style encoders + modal-aware priors/generators
-+ attention-based cross-modal fusion.
-
-Per client k and modality m in {ts, txt}:
-  h^(m)   = f_theta^(m)(x^(m))            (modality feature, 128-d)
-  h~^(m)  = G^(m)(p_k^(m))  if I^(m)=0    (pseudo feature from the prior)
-  z       = phi(h~^(ts), h~^(txt))        (bidirectional cross-attention fusion)
-  y_hat   = g(z)
-
-Loss (Eq. 5): L = L_task + lambda_align * L_align + lambda_reg * L_reg with
-L_align = mean over complete samples of ||h^(m) - G^(m)(p_k^(m))||^2 (h detached)
-L_reg   = ||p_ts||^2 + ||p_txt||^2.
-"""
+"""Lightweight patent implementation with genuine two-token modality attention."""
+import math
 import torch
-import torch.nn.functional as F
 from torch import nn
+from torch.nn import functional as F
+from methods import method_components
 
-from module import (TimeEmbed, TransformerEncoder, gateMLP, multiTimeAttention)
 
-
-class ModalityEncoder(nn.Module):
-    """Irregular-time attention encoder for one modality stream.
-
-    ts:  values+mask (2*17 ch) at irregular hours -> grid [B, T, d]
-    txt: frozen 768-d BioClinicalBERT CLS note embeddings at irregular
-         offsets -> grid [B, T, d]
-    """
-
-    def __init__(self, in_dim, d, embed_time, num_heads, layers, dropout):
+class ModalityFusion(nn.Module):
+    def __init__(self, dim, heads, dropout):
         super().__init__()
-        self.time_embed = TimeEmbed(embed_time)
-        self.time_attn = multiTimeAttention(in_dim, d, embed_time, 8)
-        self.mem = TransformerEncoder(d, num_heads, layers, dropout)
-        self.d = d
+        self.heads, self.dim = heads, dim
+        self.qkv = nn.Linear(dim, 3 * dim)
+        self.proj = nn.Linear(dim, dim)
+        self.norm1, self.norm2 = nn.LayerNorm(dim), nn.LayerNorm(dim)
+        self.ff = nn.Sequential(nn.Linear(dim, dim * 2), nn.ReLU(),
+                                nn.Dropout(dropout), nn.Linear(dim * 2, dim))
+        self.pool = nn.Linear(dim, 1)
+        self.dropout = nn.Dropout(dropout)
+        self.modality_embedding = nn.Parameter(torch.randn(2, dim) * 0.02)
 
-    def forward(self, values, times, key_mask, query_times):
-        te_key = self.time_embed(times)
-        te_query = self.time_embed(query_times)
-        grid = self.time_attn(te_query, te_key, values, key_mask)  # [B, T, d]
-        grid = self.mem(grid)
-        return grid.mean(dim=1)                                    # [B, d]
+    def forward(self, features, return_weights=False):
+        x = features + self.modality_embedding
+        b, tokens, d = x.shape
+        q, k, v = self.qkv(x).reshape(b, tokens, 3, self.heads, d // self.heads).permute(2, 0, 3, 1, 4)
+        weights = torch.softmax(q @ k.transpose(-1, -2) / math.sqrt(d // self.heads), dim=-1)
+        attended = (weights @ v).transpose(1, 2).reshape(b, tokens, d)
+        x = self.norm1(x + self.dropout(self.proj(attended)))
+        x = self.norm2(x + self.ff(x))
+        pool_weights = torch.softmax(self.pool(x), dim=1)
+        result = (x * pool_weights).sum(dim=1)
+        return (result, weights, pool_weights) if return_weights else result
 
 
 class FedCMAModel(nn.Module):
     def __init__(self, cfg):
         super().__init__()
+        d, h = cfg.embed_dim, cfg.hidden_dim
         self.cfg = cfg
-        d = cfg.embed_dim
-        self.ts_time_embed = TimeEmbed(cfg.embed_time)
-        self.ts_attn = multiTimeAttention(cfg.d_ts * 2, d, cfg.embed_time, 8)
-        self.ts_mem = TransformerEncoder(d, cfg.num_heads, cfg.layers, cfg.dropout)
-        self.proj_ts_reg = nn.Conv1d(cfg.d_ts * 2, d, kernel_size=1, bias=False)
-        self.moe = gateMLP(2 * d, d, 1, cfg.dropout)
-        self.txt_enc = ModalityEncoder(768, d, cfg.embed_time, cfg.num_heads,
-                                       cfg.layers, cfg.dropout)
-        self.register_buffer("time_query", torch.linspace(0, 1, cfg.tt_max))
+        self.ts_conv = nn.Sequential(nn.Conv1d(34, h, 3, padding=1), nn.ReLU(),
+                                      nn.Conv1d(h, h, 3, padding=2, dilation=2), nn.ReLU())
+        self.ts_proj = nn.Sequential(nn.Linear(2 * h + 102, d), nn.ReLU(), nn.LayerNorm(d))
+        self.text_proj = nn.Sequential(nn.Linear(768, d), nn.ReLU(), nn.Dropout(cfg.dropout),
+                                       nn.Linear(d, d), nn.LayerNorm(d))
+        self.fusion = ModalityFusion(d, cfg.num_heads, cfg.dropout)
+        self.classifier = nn.Sequential(nn.Linear(d, d // 2), nn.ReLU(),
+                                       nn.Dropout(cfg.dropout), nn.Linear(d // 2, 1))
+        # Created last: common backbone initialization is identical across methods.
+        self.generators = nn.ModuleList([
+            nn.Sequential(nn.Linear(d, cfg.prior_hidden), nn.ReLU(),
+                          nn.Linear(cfg.prior_hidden, d)) for _ in range(2)])
+        if not method_components(cfg.method)["prior"]:
+            self.generators.requires_grad_(False)
 
-        # modal-aware prior generators (global/shared parameters)
-        self.gen_ts = nn.Sequential(nn.Linear(d, d), nn.ReLU(), nn.Linear(d, d))
-        self.gen_txt = nn.Sequential(nn.Linear(d, d), nn.ReLU(), nn.Linear(d, d))
+    def encode(self, batch):
+        sequence = self.ts_conv(batch["ts"].transpose(1, 2))
+        ts = self.ts_proj(torch.cat([sequence.mean(dim=2), sequence[:, :, -1], batch["summary"]], dim=1))
+        text = self.text_proj(batch["text"])
+        return torch.stack([ts, text], dim=1)
 
-        # attention-based cross-modal fusion
-        self.cross_txt_to_ts = nn.MultiheadAttention(d, cfg.num_heads,
-                                                     dropout=cfg.dropout, batch_first=True)
-        self.cross_ts_to_txt = nn.MultiheadAttention(d, cfg.num_heads,
-                                                     dropout=cfg.dropout, batch_first=True)
-        fd = 2 * d
-        self.proj1 = nn.Linear(fd, fd)
-        self.proj2 = nn.Linear(fd, fd)
-        self.out_layer = nn.Linear(fd, cfg.num_out)
+    def generated(self, priors):
+        return torch.stack([g(priors[m]) for m, g in enumerate(self.generators)])
 
-    # --- modality encoders -------------------------------------------------
-    def encode_ts(self, irg, irg_mask, tt, reg_ts):
-        te_key = self.ts_time_embed(tt)
-        te_query = self.ts_time_embed(self.time_query.unsqueeze(0).expand(irg.size(0), -1))
-        x = torch.cat([irg, irg_mask], dim=-1)
-        m = torch.cat([irg_mask, irg_mask], dim=-1)
-        grid_irg = self.ts_attn(te_query, te_key, x, m)                     # [B,T,d]
-        grid_reg = self.proj_ts_reg(reg_ts.transpose(1, 2)).transpose(1, 2)  # [B,T,d]
-        gate = self.moe(torch.cat([grid_irg, grid_reg], dim=-1))
-        grid = gate * grid_irg + (1 - gate) * grid_reg
-        return self.ts_mem(grid).mean(dim=1)
+    def forward(self, batch, priors=None):
+        real = self.encode(batch)
+        present = batch["masks"].unsqueeze(-1)
+        replacement = self.generated(priors).unsqueeze(0) if priors is not None else torch.zeros_like(real)
+        features = present * real + (1 - present) * replacement
+        logits = self.classifier(self.fusion(features)).squeeze(-1)
+        return logits, real
 
-    def encode_txt(self, batch, note_mask):
-        emb = batch["note_emb"]
-        return self.txt_enc(emb, batch["note_time"], note_mask,
-                            self.time_query.unsqueeze(0).expand(emb.size(0), -1))
-
-    # --- forward ------------------------------------------------------------
-    def fuse(self, h_ts, h_txt):
-        a = h_ts.unsqueeze(1)
-        b = h_txt.unsqueeze(1)
-        h_ts_f, _ = self.cross_ts_to_txt(a, b, b)
-        h_txt_f, _ = self.cross_txt_to_ts(b, a, a)
-        z = torch.cat([h_ts_f.squeeze(1), h_txt_f.squeeze(1)], dim=-1)
-        z = self.proj2(F.dropout(F.relu(self.proj1(z)), p=self.cfg.dropout,
-                                 training=self.training)) + z
-        return z
-
-    def forward(self, batch, priors, use_priors=True):
-        """priors: (p_ts [B,d], p_txt [B,d]) broadcast client priors per sample."""
-        h_ts = self.encode_ts(batch["irg"], batch["irg_mask"], batch["tt"], batch["reg"])
-        h_txt = self.encode_txt(batch, batch["note_mask"])
-        i_ts, i_txt = batch["i_ts"].unsqueeze(-1), batch["i_txt"].unsqueeze(-1)
-
-        if use_priors:
-            p_ts, p_txt = priors
-            h_ts_in = i_ts * h_ts + (1 - i_ts) * self.gen_ts(p_ts)
-            h_txt_in = i_txt * h_txt + (1 - i_txt) * self.gen_txt(p_txt)
+    def loss(self, logits, batch, real, priors=None, sample_weights=None):
+        if sample_weights is None:
+            task = F.binary_cross_entropy_with_logits(logits, batch["label"])
+            unweighted = task
         else:
-            # baseline handling of missing modalities: zero feature
-            h_ts_in = i_ts * h_ts
-            h_txt_in = i_txt * h_txt
-        z = self.fuse(h_ts_in, h_txt_in)
-        return self.out_layer(z), (h_ts, h_txt)
-
-    def loss(self, logits, batch, h_true, priors, use_priors=True):
-        cfg = self.cfg
-        y = batch["label"]
-        if cfg.task == "ihm":
-            l_task = F.cross_entropy(logits, y)
-        else:
-            l_task = F.binary_cross_entropy_with_logits(logits, y.float())
-        out = {"task": l_task.detach()}
-        loss = l_task
-        if use_priors:
-            p_ts, p_txt = priors
-            complete = batch["complete"].float()
-            gen_ts, gen_txt = self.gen_ts(p_ts), self.gen_txt(p_txt)
-            if complete.sum() > 0:
-                h_ts, h_txt = h_true
-                detach = bool(getattr(cfg, "align_detach", 1))
-                h_ts_a = h_ts.detach() if detach else h_ts
-                h_txt_a = h_txt.detach() if detach else h_txt
-                l_align = (complete * (F.mse_loss(gen_ts, h_ts_a, reduction="none").mean(-1)
-                                       + F.mse_loss(gen_txt, h_txt_a, reduction="none").mean(-1))).sum() \
-                    / (2 * complete.sum())
-                loss = loss + cfg.lambda_align * l_align
-                out["align"] = l_align.detach()
-            l_reg = p_ts.pow(2).mean() + p_txt.pow(2).mean()
-            loss = loss + cfg.lambda_reg * l_reg
-            out["reg"] = l_reg.detach()
-        out["total"] = loss.detach()
-        return loss, out
-
-    @torch.no_grad()
-    def predict(self, batch, priors, use_priors=True):
-        logits, _ = self.forward(batch, priors, use_priors=use_priors)
-        if self.cfg.task == "ihm":
-            return torch.softmax(logits, dim=-1)[:, 1]
-        return torch.sigmoid(logits)
+            per_sample = F.binary_cross_entropy_with_logits(logits, batch["label"], reduction="none")
+            task = (sample_weights * per_sample).mean()
+            unweighted = per_sample.mean()
+        align, reg = task.new_zeros(()), task.new_zeros(())
+        if priors is not None:
+            complete = batch["masks"].sum(dim=1) == 2
+            if complete.any():
+                target = real[complete].detach() if self.cfg.align_detach else real[complete]
+                # Euclidean squared norm: SUM over features, mean over samples/modalities.
+                align = (target - self.generated(priors).unsqueeze(0)).square().sum(-1).mean()
+            reg = priors.square().sum()
+        loss = task + self.cfg.lambda_align * align + self.cfg.lambda_reg * reg
+        return loss, {"task": task, "task_unweighted": unweighted, "align": align, "reg": reg}

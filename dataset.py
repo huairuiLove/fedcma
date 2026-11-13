@@ -1,161 +1,221 @@
-"""Federated multimodal dataset for FedCMA.
-
-Loads the p2x pickles + precomputed note embeddings, builds
-- regularized hourly grid reg_ts (window x 2*17) by forward-filling the
-  normalized irregular observations (backbone F_impute),
-- fixed sample-level missingness masks I^(m) ~ Bernoulli(1-q) per modality,
-  resampled until at least one modality is present (seed fixed across methods,
-  identical at train and test time, as in the paper),
-- difficulty scores S_i = xi * P_i + (1-xi) * C_i with P_i = 1 - (I_ts+I_txt)/2
-  and C_i = client-normalized observation counts,
-- Dirichlet(alpha) client partitions of the train/val/test cohorts.
-"""
+"""Patient-grouped IHM data with training-only preprocessing and audit manifest."""
+from pathlib import Path
+import hashlib
+import json
 import pickle
 
 import numpy as np
 import torch
-from torch.utils.data import Dataset
-
-NUM_NOTES = 5  # backbone default: last 5 notes
+from sklearn.model_selection import train_test_split
 
 
-def f_impute(irg, mask, tt, window):
-    """Hourly forward-fill grid of (value|mask) channels, [window, 2*d]."""
-    d = irg.shape[1]
-    out = np.zeros((int(window), 2 * d), dtype=np.float32)
-    for x, t, m in zip(irg, tt, mask):
-        row = int(t)
-        if row >= window:
+class ArrayUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        allowed = {("numpy", "ndarray"), ("numpy", "dtype")}
+        allowed.update((m, n) for m in ("numpy.core.multiarray", "numpy._core.multiarray")
+                       for n in ("_reconstruct", "scalar"))
+        if (module, name) not in allowed:
+            raise pickle.UnpicklingError(f"Unexpected object: {module}.{name}")
+        return super().find_class(module, name)
+
+
+def read_arrays(path):
+    with open(path, "rb") as stream:
+        return ArrayUnpickler(stream).load()
+
+
+def sha256(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def private_id(value):
+    return hashlib.sha256(value.encode()).hexdigest()[:24]
+
+
+def fit_normalizer(samples):
+    """Fit winsorization and standardization on selected TRAIN observations."""
+    stats = {key: [] for key in ("lower", "upper", "mean", "std")}
+    for j in range(17):
+        values = np.concatenate([s["irg_ts"][s["irg_ts_mask"][:, j] == 1, j]
+                                 for s in samples]).astype(np.float64)
+        if not len(values):
+            values = np.zeros(1)
+        if not np.isfinite(values).all():
+            raise ValueError("Non-finite training observations")
+        lo, hi = np.quantile(values, [0.005, 0.995])
+        clipped = np.clip(values, lo, hi)
+        for key, value in zip(stats, (lo, hi, clipped.mean(), max(clipped.std(), 1e-6))):
+            stats[key].append(float(value))
+    return stats
+
+
+def f_impute(values, mask, times, window=48):
+    """Carry values through empty hours; keep the actual hourly observation mask."""
+    d = values.shape[1]
+    hourly = np.zeros((window, d), dtype=np.float32)
+    observed = np.zeros_like(hourly)
+    for i in np.argsort(times, kind="stable"):
+        row = int(np.floor(times[i]))
+        if not 0 <= row < window:
             continue
-        for j in range(d):
-            if m[j] == 1:
-                out[row, j] = x[j]
-                out[row, d + j] = 1.0
-            elif row > 0 and out[row - 1, d + j] == 1.0:
-                out[row, j] = out[row - 1, j]
-                out[row, d + j] = 1.0
-    return out
+        present = mask[i].astype(bool)
+        hourly[row, present] = values[i, present]
+        observed[row, present] = 1
+    previous = np.zeros(d, dtype=np.float32)
+    for row in range(window):
+        present = observed[row].astype(bool)
+        previous[present] = hourly[row, present]
+        hourly[row] = previous
+    return np.concatenate([hourly, observed], axis=1)
 
 
-def make_masks(n, q, rng):
-    """Bernoulli(1-q) per modality; resample while both are 0."""
-    m = rng.random((n, 2)) > q
-    both = m.sum(axis=1) == 0
-    while both.any():
-        idx = np.where(both)[0]
-        m[idx] = rng.random((len(idx), 2)) > q
-        both = m.sum(axis=1) == 0
-    return m.astype(bool)
+def make_masks(n, missing_rate, rng):
+    """Exactly round(rate*N) incomplete samples, each missing ONE modality.
+
+    rate=0.5 means 50% incomplete samples and 25% missing modality entries.
+    """
+    if not 0 <= missing_rate <= 1:
+        raise ValueError("missing_rate must be in [0, 1]")
+    masks = np.ones((n, 2), dtype=np.float32)
+    selected = rng.permutation(n)[:round(n * missing_rate)]
+    masks[selected, rng.integers(0, 2, len(selected))] = 0
+    return masks
 
 
-def dirichlet_partition(n, k, alpha, rng):
-    """Sample counts per client ~ Dir(alpha), then assign a random permutation.
-    Guarantees >=1 sample per client when n >= k."""
-    parts = np.sort(rng.permutation(n))
-    cuts = [0]
-    for c in rng.dirichlet([alpha] * k):
-        cuts.append(min(n, cuts[-1] + int(round(c * n))))
-    cuts[-1] = n
-    sizes = [cuts[i + 1] - cuts[i] for i in range(k)]
-    if n >= k:  # steal from the largest client to feed any empty client
-        for i in range(k):
-            if sizes[i] == 0:
-                big = int(np.argmax(sizes))
-                if sizes[big] <= 1:
-                    break
-                sizes[big] -= 1
-                sizes[i] += 1
-        cuts = [0]
-        for s in sizes:
-            cuts.append(cuts[-1] + s)
-    assign = np.zeros(n, dtype=np.int64)
-    for cid in range(k):
-        assign[parts[cuts[cid]:cuts[cid + 1]]] = cid
-    return assign
+def partition_patients(patient_ids, labels, k, alpha, rng):
+    """Class-conditional Dirichlet TRAIN allocation; one patient, one client."""
+    patients = np.unique(patient_ids)
+    if len(patients) < k:
+        raise ValueError("Fewer training patients than clients")
+    grouped = {p: np.flatnonzero(patient_ids == p) for p in patients}
+    patient_label = {p: int(np.max(labels[grouped[p]])) for p in patients}
+    for _ in range(1000):
+        mapping = {}
+        for label in (0, 1):
+            group = np.array([p for p in patients if patient_label[p] == label])
+            rng.shuffle(group)
+            sizes = rng.multinomial(len(group), rng.dirichlet(np.full(k, alpha)))
+            for cid, part in enumerate(np.split(group, np.cumsum(sizes)[:-1])):
+                mapping.update({p: cid for p in part})
+        assignment = np.array([mapping[p] for p in patient_ids], dtype=np.int64)
+        if np.bincount(assignment, minlength=k).min() >= min(20, len(labels) // (2 * k)):
+            return assignment
+    raise ValueError("Could not create usable client allocation")
 
 
-class FLDataset(Dataset):
-    def __init__(self, task, split, data_dir, cfg):
-        with open(f"{data_dir}/{task}/{split}_p2x.pkl", "rb") as f:
-            raw = pickle.load(f)
-        with open(f"{data_dir}/{task}/{split}_meta.pkl", "rb") as f:
-            meta = pickle.load(f)
-        by_name = {m["name"]: m["note_ids"] for m in meta}
-        emb = np.load(f"{data_dir}/{task}/notes_{split}.npz")["emb"].astype(np.float32)
-        self.window = cfg.tt_max
-        self.task = task
-
-        self.samples = []
-        for s in raw:
-            reg = f_impute(s["irg_ts"], s["irg_ts_mask"], s["ts_tt"], self.window)
-            note_ids = by_name[s["name"]][-NUM_NOTES:]
-            ne = emb[note_ids] if note_ids else np.zeros((0, 768), np.float32)
-            # backbone normalizes note time as 1 - time_to_end / tt_max
-            nte = s["text_time_to_end"][-NUM_NOTES:]
-            nt = 1.0 - nte / self.window
-            self.samples.append({
-                "irg": torch.from_numpy(s["irg_ts"]),
-                "mask": torch.from_numpy(s["irg_ts_mask"]),
-                "tt": torch.from_numpy(s["ts_tt"] / self.window),
-                "reg": torch.from_numpy(reg),
-                "note_emb": torch.from_numpy(ne),
-                "note_time": torch.from_numpy(nt.astype(np.float32)),
-                "label": torch.tensor(s["label"]),
-                "n_ts": int(s["irg_ts_mask"].sum()),
-                "n_txt": len(note_ids),
-            })
-
-        rng = np.random.default_rng(cfg.mask_seed)
-        self.masks = make_masks(len(self.samples), cfg.q, rng)
-
-        # difficulty (needs the client assignment first for C_i)
-        self.client = dirichlet_partition(len(self.samples), cfg.num_clients,
-                                          cfg.dir_alpha,
-                                          np.random.default_rng(cfg.partition_seed))
-
-    def __len__(self):
-        return len(self.samples)
-
-    def difficulty(self, xi=0.5):
-        """S_i = xi*P_i + (1-xi)*C_i; C_i client-normalized counts (tex Eq.9-11)."""
-        P = 1.0 - self.masks.sum(axis=1) / 2.0
-        C = np.zeros(len(self.samples))
-        for k in np.unique(self.client):
-            sel = self.client == k
-            n_ts = np.array([self.samples[i]["n_ts"] for i in np.where(sel)[0]], float)
-            n_txt = np.array([self.samples[i]["n_txt"] for i in np.where(sel)[0]], float)
-            c = 0.5 * (n_ts / max(n_ts.max(), 1) + n_txt / max(n_txt.max(), 1))
-            C[sel] = np.clip(c, 0, 1)
-        return xi * P + (1 - xi) * C
-
-    def __getitem__(self, i):
-        s = self.samples[i]
-        n = len(s["note_emb"])
-        if n < NUM_NOTES:  # pad notes
-            pad = NUM_NOTES - n
-            note_emb = torch.cat([s["note_emb"], torch.zeros(pad, 768)], 0)
-            note_time = torch.cat([s["note_time"], torch.zeros(pad)])
-            note_mask = torch.cat([torch.ones(n), torch.zeros(pad)])
+def prepare_data(data_dir, output_dir, train_size=3072, subset_seed=2026,
+                 mask_seed=42, partition_seed=42, missing_rate=0.5,
+                 num_clients=5, dir_alpha=0.5):
+    root, destination = Path(data_dir) / "ihm", Path(output_dir)
+    destination.mkdir(parents=True, exist_ok=True)
+    if (destination / "prepared.pt").exists():
+        raise FileExistsError("Prepared data exists; use a new experiment directory")
+    raw = {split: read_arrays(root / f"{split}_p2x.pkl") for split in ("train", "val", "test")}
+    patients = {split: {s["name"].split("_")[0] for s in samples} for split, samples in raw.items()}
+    overlaps = {f"{a}_{b}": len(patients[a] & patients[b])
+                for a, b in (("train", "val"), ("train", "test"), ("val", "test"))}
+    if any(overlaps.values()):
+        raise ValueError(f"Patient leakage: {overlaps}")
+    source_counts = {split: len(samples) for split, samples in raw.items()}
+    train_idx = np.arange(len(raw["train"]))
+    if train_size and train_size < len(train_idx):
+        train_idx, _ = train_test_split(train_idx, train_size=train_size,
+                                       random_state=subset_seed,
+                                       stratify=[s["label"] for s in raw["train"]])
+        train_idx.sort()
+    raw["train"] = [raw["train"][int(i)] for i in train_idx]
+    normalizer = fit_normalizer(raw["train"])
+    low, high, mean, std = (np.array(normalizer[key], np.float32)
+                            for key in ("lower", "upper", "mean", "std"))
+    cached, metadata, text_features = {}, {}, {}
+    for split_index, (split, samples) in enumerate(raw.items()):
+        by_name = {s["name"]: s["note_ids"] for s in read_arrays(root / f"{split}_meta.pkl")}
+        with np.load(root / f"notes_{split}.npz") as archive:
+            emb = archive["emb"].astype(np.float32)
+        grids, summaries, texts = [], [], []
+        for s in samples:
+            mask, times = s["irg_ts_mask"], s["ts_tt"]
+            vals = (np.clip(s["irg_ts"], low, high) - mean) / std
+            vals = np.where(mask == 1, vals, 0).astype(np.float32)
+            grids.append(f_impute(vals, mask, times))
+            channel_features = []
+            for j in range(17):
+                obs = vals[mask[:, j] == 1, j]
+                channel_features.extend([float(obs.mean()), float(obs.std()), float(obs.min()),
+                                         float(obs.max()), float(obs[-1]), float((mask[:, j] == 1).mean())]
+                                        if len(obs) else [0.] * 6)
+            summaries.append(channel_features)
+            note_ids = by_name[s["name"]][-5:]
+            if not note_ids:
+                raise ValueError("The base cohort must have both modalities")
+            texts.append(emb[note_ids].mean(axis=0))
+        text_features[split] = np.stack(texts)
+        labels = np.array([s["label"] for s in samples], dtype=np.float32)
+        ids = np.array([s["name"].split("_")[0] for s in samples])
+        if split == "train":
+            clients = partition_patients(ids, labels, num_clients, dir_alpha,
+                                         np.random.default_rng(partition_seed))
+            fractions = np.bincount(clients, minlength=num_clients) / len(clients)
         else:
-            note_emb = s["note_emb"]
-            note_time = s["note_time"]
-            note_mask = torch.ones(n)
-        i_ts, i_txt = self.masks[i]
-        return {
-            "irg": s["irg"], "irg_mask": s["mask"], "tt": s["tt"], "reg": s["reg"],
-            "note_emb": note_emb, "note_time": note_time,
-            "note_mask": note_mask.long(),
-            "i_ts": torch.tensor(float(i_ts)), "i_txt": torch.tensor(float(i_txt)),
-            "complete": torch.tensor(float(i_ts and i_txt)),
-            "label": s["label"], "idx": torch.tensor(i),
-        }
+            # Evaluation client allocation uses patient ID and TRAIN client sizes,
+            # never evaluation labels. Global pooled metrics are the primary result.
+            mapping = {}
+            for patient in np.unique(ids):
+                digest = hashlib.sha256(f"{partition_seed}:{patient}".encode()).digest()
+                u = int.from_bytes(digest[:8], "big") / 2**64
+                mapping[patient] = min(num_clients - 1, int(np.searchsorted(np.cumsum(fractions), u)))
+            clients = np.array([mapping[p] for p in ids], dtype=np.int64)
+        masks = make_masks(len(samples), missing_rate,
+                           np.random.default_rng(mask_seed + 1009 * split_index))
+        cached[split] = {"ts": torch.from_numpy(np.stack(grids)),
+                         "summary": torch.tensor(summaries, dtype=torch.float32),
+                         "label": torch.from_numpy(labels), "masks": torch.from_numpy(masks),
+                         "client": torch.from_numpy(clients)}
+        metadata[split] = {
+            "source_indices": train_idx.tolist() if split == "train" else list(range(len(samples))),
+            "sample_ids": [private_id(s["name"]) for s in samples],
+            "patient_ids": [private_id(p) for p in ids], "n": len(samples),
+            "n_patients": len(np.unique(ids)), "positives": int(labels.sum()),
+            "positive_rate": float(labels.mean()),
+            "incomplete_sample_rate": float(np.mean(masks.sum(axis=1) == 1)),
+            "missing_entry_rate": float(1 - masks.mean()),
+            "mask_counts": {"complete": int((masks.sum(axis=1) == 2).sum()),
+                            "ts_missing": int((masks[:, 0] == 0).sum()),
+                            "text_missing": int((masks[:, 1] == 0).sum())},
+            "clients": [{"client": k, "n": int((clients == k).sum()),
+                         "positives": int(labels[clients == k].sum())} for k in range(num_clients)]}
+    text_mean = text_features["train"].mean(axis=0)
+    text_std = np.maximum(text_features["train"].std(axis=0), 1e-5)
+    for split in cached:
+        cached[split]["text"] = torch.from_numpy(np.clip(
+            (text_features[split] - text_mean) / text_std, -5, 5).astype(np.float32))
+        if not all(torch.isfinite(v).all() for v in cached[split].values()):
+            raise ValueError(f"Non-finite features in {split}")
+    torch.save(cached, destination / "prepared.pt")
+    inputs = [f"{s}_{kind}.pkl" for s in raw for kind in ("p2x", "meta")]
+    inputs += [f"notes_{s}.npz" for s in raw] + ["stats.json"]
+    manifest = {"schema_version": 1, "task": "ihm", "source_counts": source_counts,
+                "patient_overlap": overlaps, "splits": metadata,
+                "settings": {"train_size": train_size, "subset_seed": subset_seed,
+                             "mask_seed": mask_seed, "partition_seed": partition_seed,
+                             "missing_rate": missing_rate, "num_clients": num_clients,
+                             "dir_alpha": dir_alpha},
+                "normalizer": normalizer, "text_mean": text_mean.tolist(),
+                "text_std": text_std.tolist(),
+                "input_sha256": {name: sha256(root / name) for name in inputs},
+                "prepared_sha256": sha256(destination / "prepared.pt")}
+    (destination / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return manifest
 
 
-def collate(batch):
-    out = {}
-    for k in ["irg", "irg_mask", "tt", "note_emb", "note_time", "note_mask"]:
-        out[k] = torch.nn.utils.rnn.pad_sequence([b[k] for b in batch],
-                                                 batch_first=True)
-    for k in ["reg", "i_ts", "i_txt", "complete", "label", "idx"]:
-        out[k] = torch.stack([b[k] for b in batch])
-    return out
+def load_prepared(path, device):
+    path = Path(path)
+    manifest = json.loads((path.parent / "manifest.json").read_text(encoding="utf-8"))
+    if sha256(path) != manifest["prepared_sha256"]:
+        raise ValueError("Prepared data hash does not match manifest")
+    data = torch.load(path, map_location="cpu", weights_only=True)
+    return {s: {k: v.to(device) for k, v in rows.items()} for s, rows in data.items()}, manifest

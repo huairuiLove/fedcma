@@ -1,0 +1,4 @@
+# Optional: rebuilding from original clinical files, not needed for training.
+-r requirements.txt
+pandas==3.1.1
+transformers>=4.40
