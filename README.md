@@ -2,6 +2,14 @@
 
 本项目运行IHM小规模二分类实验，比较FedCMA、FedAvg和FedProx，保存可重放的模型、训练记录与预测。旧的`runs/`保留为历史材料；新汇总程序只读取明确指定的实验目录，不使用旧稿或旧日志中的数值。
 
+## 第三批专利交付
+
+本次稿件采用第三批主实验结果，比较 FedCMA、FedAvg、FedProx，随机种子为 42、43、44。完整训练记录和处理后输入在本地独立交付包中保存；第一、第二和第四批继续保留在原位置。
+
+交付说明与独立复现入口见 [delivery/batch3/README.md](delivery/batch3/README.md)。包内 `code/` 是第三批实际训练时保存的源码快照；当前仓库同时保留各批实验入口。`delivery/batch3/build_package.py` 从原始文件清单组装交付包，核对 SHA-256，并逐文件校验 ZIP 内容。解压后可直接重跑正文的 9 次实验、全部 18 次正式实验或包含验证候选在内的 31 次运行，无需第一、第二批目录。
+
+正文报告的 FedCMA 测试 AUC 为 0.7463±0.0043、AP 为 0.3479±0.0008；FedAvg 分别为 0.7287±0.0078、0.3185±0.0223；FedProx 分别为 0.7196±0.0098、0.3190±0.0139。均为三个种子的均值和样本标准差。稿件正文只设置这三种方法的主实验比较。
+
 技术对照见 [IMPLEMENTATION_REVIEW.md](IMPLEMENTATION_REVIEW.md)。第一批主实验结果见 [EXPERIMENT_REPORT.md](EXPERIMENT_REPORT.md)。
 
 第一批补充消融见 [ABLATION_REPORT.md](ABLATION_REPORT.md)。第一批所有原始结果已保留；[BATCHES.md](BATCHES.md) 区分四批实验、配置和存储位置。原入口保持第一批设置，后续批次使用各自的专用入口。
