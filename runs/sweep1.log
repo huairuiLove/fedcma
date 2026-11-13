@@ -1,0 +1,42 @@
+[20:35:11] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'freeze_text': 1, 'text_model': 'yikuan8/Clinical-Longformer', 'max_length': 512, 'txt_lr': 2e-05, 'fp16': True, 'lambda_align': 1.0, 'lambda_reg': 0.001, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 0.4, 'device': 'mps', 'smoke': False, 'tag': 's1_la1.0_dm0.4', 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+/Volumes/TiPlus7100s/论文/fedpt/FedCMA/module.py:82: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+[20:36:46] [fedcma/ihm] r0 rho=0.60 delta=0.20 val={'auc': 0.7607700214933184, 'auprc': 0.40143354374035267} test_pers[auprc]=0.3214 (1.5m)
+[20:38:32] [fedcma/ihm] r1 rho=0.70 delta=0.25 val={'auc': 0.753013737033922, 'auprc': 0.416999019212378} test_pers[auprc]=0.3375 (3.3m)
+[20:40:30] [fedcma/ihm] r2 rho=0.80 delta=0.30 val={'auc': 0.721054107092795, 'auprc': 0.3598194790250424} test_pers[auprc]=0.3356 (5.3m)
+[20:42:47] [fedcma/ihm] r3 rho=0.90 delta=0.35 val={'auc': 0.7109615923745445, 'auprc': 0.34316749448782974} test_pers[auprc]=0.3424 (7.6m)
+[20:45:36] [fedcma/ihm] r4 rho=1.00 delta=0.40 val={'auc': 0.6865713484721054, 'auprc': 0.29164881660574254} test_pers[auprc]=0.3199 (10.4m)
+[20:45:36] best: {"val": 0.416999019212378, "round": 1, "test_personalized": {"auc": 0.7240429692364203, "auprc": 0.3374759362934347}, "test_global": {"auc": 0.7174827045828078, "auprc": 0.31147942097657655}}
+[20:45:40] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'freeze_text': 1, 'text_model': 'yikuan8/Clinical-Longformer', 'max_length': 512, 'txt_lr': 2e-05, 'fp16': True, 'lambda_align': 1.0, 'lambda_reg': 0.001, 'align_detach': 1, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 0.6, 'device': 'mps', 'smoke': False, 'tag': 's1_la1.0_dm0.6', 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+Traceback (most recent call last):
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/main.py", line 111, in <module>
+    main()
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/main.py", line 104, in main
+    result = run_fed(cfg, seed=cfg.seed, log=log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/fed.py", line 77, in run_fed
+    ds = FLDataset(cfg.task, split, data_dir, cfg, tokenizer=tokenizer)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: FLDataset.__init__() got an unexpected keyword argument 'tokenizer'
+[20:45:41] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'freeze_text': 1, 'text_model': 'yikuan8/Clinical-Longformer', 'max_length': 512, 'txt_lr': 2e-05, 'fp16': True, 'lambda_align': 2.0, 'lambda_reg': 0.001, 'align_detach': 1, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 0.4, 'device': 'mps', 'smoke': False, 'tag': 's1_la2.0_dm0.4', 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+Traceback (most recent call last):
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/main.py", line 111, in <module>
+    main()
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/main.py", line 104, in main
+    result = run_fed(cfg, seed=cfg.seed, log=log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/fed.py", line 77, in run_fed
+    ds = FLDataset(cfg.task, split, data_dir, cfg, tokenizer=tokenizer)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: FLDataset.__init__() got an unexpected keyword argument 'tokenizer'
+[20:45:43] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'freeze_text': 1, 'text_model': 'yikuan8/Clinical-Longformer', 'max_length': 512, 'txt_lr': 2e-05, 'fp16': True, 'lambda_align': 2.0, 'lambda_reg': 0.001, 'align_detach': 1, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'delta_max': 0.6, 'device': 'mps', 'smoke': False, 'tag': 's1_la2.0_dm0.6', 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+Traceback (most recent call last):
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/main.py", line 111, in <module>
+    main()
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/main.py", line 104, in main
+    result = run_fed(cfg, seed=cfg.seed, log=log)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/TiPlus7100s/论文/fedpt/FedCMA/fed.py", line 77, in run_fed
+    ds = FLDataset(cfg.task, split, data_dir, cfg, tokenizer=tokenizer)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: FLDataset.__init__() got an unexpected keyword argument 'tokenizer'

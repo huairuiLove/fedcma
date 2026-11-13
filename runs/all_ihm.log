@@ -1,0 +1,25 @@
+[17:20:27] config: {'task': 'ihm', 'method': 'fedcma', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'lambda_align': 0.5, 'lambda_reg': 0.001, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'device': 'mps', 'smoke': False, 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+/Volumes/TiPlus7100s/论文/fedpt/FedCMA/module.py:82: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+[17:22:04] [fedcma/ihm] r0 rho=0.60 delta=0.20 val={'auc': 0.7617979628072143, 'auprc': 0.4059238322720535} test_pers[auprc]=0.3277 (1.6m)
+[17:23:48] [fedcma/ihm] r1 rho=0.70 delta=0.40 val={'auc': 0.7596953555742454, 'auprc': 0.41265927130066316} test_pers[auprc]=0.3397 (3.3m)
+[17:25:44] [fedcma/ihm] r2 rho=0.80 delta=0.60 val={'auc': 0.726988131950285, 'auprc': 0.39316031301636745} test_pers[auprc]=0.3318 (5.2m)
+[17:27:58] [fedcma/ihm] r3 rho=0.90 delta=0.80 val={'auc': 0.6779740211195215, 'auprc': 0.3223588148713818} test_pers[auprc]=0.3079 (7.5m)
+[17:30:36] [fedcma/ihm] r4 rho=1.00 delta=1.00 val={'auc': 0.6740024296794692, 'auprc': 0.2606436623676147} test_pers[auprc]=0.2839 (10.1m)
+[17:30:36] best: {"val": 0.41265927130066316, "round": 1, "test_personalized": {"auc": 0.7241714574743021, "auprc": 0.339690505910187}, "test_global": {"auc": 0.7188268419778567, "auprc": 0.3178638858239485}}
+[17:30:39] config: {'task': 'ihm', 'method': 'fedavg', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'lambda_align': 0.5, 'lambda_reg': 0.001, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'device': 'mps', 'smoke': False, 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+/Volumes/TiPlus7100s/论文/fedpt/FedCMA/module.py:82: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+[17:33:07] [fedavg/ihm] r0 rho=1.00 delta=0.20 val={'auc': 0.7622184842538081, 'auprc': 0.3731513781972576} test_pers[auprc]=0.3391 (2.4m)
+[17:35:36] [fedavg/ihm] r1 rho=1.00 delta=0.40 val={'auc': 0.7558172133445473, 'auprc': 0.4044559067015194} test_pers[auprc]=0.3337 (4.9m)
+[17:38:13] [fedavg/ihm] r2 rho=1.00 delta=0.60 val={'auc': 0.7463321184935987, 'auprc': 0.3883471631753508} test_pers[auprc]=0.3380 (7.5m)
+[17:40:51] [fedavg/ihm] r3 rho=1.00 delta=0.80 val={'auc': 0.7052611905429399, 'auprc': 0.3648321172158106} test_pers[auprc]=0.3215 (10.2m)
+[17:43:23] [fedavg/ihm] r4 rho=1.00 delta=1.00 val={'auc': 0.6883001588636576, 'auprc': 0.3500042925910342} test_pers[auprc]=0.3331 (12.7m)
+[17:43:23] best: {"val": 0.4044559067015194, "round": 1, "test_personalized": {"auc": 0.7258799071087557, "auprc": 0.3337257639550346}, "test_global": {"auc": 0.7263820407955255, "auprc": 0.3184915088935668}}
+[17:43:27] config: {'task': 'ihm', 'method': 'fedprox', 'seed': 42, 'num_clients': 5, 'dir_alpha': 0.5, 'rounds': 5, 'local_epochs': 6, 'q': 0.5, 'mask_seed': 42, 'partition_seed': 42, 'embed_dim': 128, 'embed_time': 64, 'num_heads': 8, 'layers': 3, 'dropout': 0.1, 'lr': 0.0004, 'batch_size': 32, 'mu': 0.01, 'lambda_align': 0.5, 'lambda_reg': 0.001, 'xi': 0.5, 'rho0': 0.6, 'delta0': 0.2, 'device': 'mps', 'smoke': False, 'data_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/data', 'out_dir': '/Volumes/TiPlus7100s/论文/fedpt/FedCMA/runs', 'tt_max': 48, 'num_out': 2, 'd_ts': 17}
+/Volumes/TiPlus7100s/论文/fedpt/FedCMA/module.py:82: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+  self.encoder = nn.TransformerEncoder(layer, num_layers=layers)
+[17:45:56] [fedprox/ihm] r0 rho=1.00 delta=0.20 val={'auc': 0.7228763666947013, 'auprc': 0.37423616801770226} test_pers[auprc]=0.3017 (2.4m)
+[17:48:25] [fedprox/ihm] r1 rho=1.00 delta=0.40 val={'auc': 0.7365199514064106, 'auprc': 0.4017985888154596} test_pers[auprc]=0.3073 (4.9m)
+[17:50:55] [fedprox/ihm] r2 rho=1.00 delta=0.60 val={'auc': 0.7458648724418278, 'auprc': 0.4087743635029547} test_pers[auprc]=0.3065 (7.4m)
+[17:53:24] [fedprox/ihm] r3 rho=1.00 delta=0.80 val={'auc': 0.7431548453415568, 'auprc': 0.4147674050953438} test_pers[auprc]=0.3032 (9.9m)

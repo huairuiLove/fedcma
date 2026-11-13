@@ -1,0 +1,172 @@
+{
+ "config": {
+  "task": "pheno",
+  "method": "fedavg",
+  "seed": 42,
+  "num_clients": 5,
+  "dir_alpha": 0.5,
+  "rounds": 5,
+  "local_epochs": 6,
+  "q": 0.5,
+  "mask_seed": 42,
+  "partition_seed": 42,
+  "embed_dim": 128,
+  "embed_time": 64,
+  "num_heads": 8,
+  "layers": 3,
+  "dropout": 0.1,
+  "lr": 0.0004,
+  "batch_size": 32,
+  "mu": 0.01,
+  "lambda_align": 0.5,
+  "lambda_reg": 0.001,
+  "xi": 0.5,
+  "rho0": 0.6,
+  "delta0": 0.2,
+  "device": "mps",
+  "smoke": false,
+  "data_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/data",
+  "out_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs",
+  "tt_max": 24,
+  "num_out": 25,
+  "d_ts": 17
+ },
+ "history": [
+  {
+   "round": 0,
+   "rho_t": 1.0,
+   "delta_t": 0.2,
+   "val": {
+    "micro_ap": 0.44116523946310543,
+    "micro_auc": 0.741226543035274,
+    "macro_ap": 0.34940154646574567,
+    "macro_auc": 0.6567372723592514
+   },
+   "test_personalized": {
+    "micro_ap": 0.4345470963461148,
+    "micro_auc": 0.7374657408157068,
+    "macro_ap": 0.3456461039992526,
+    "macro_auc": 0.6434130083254038
+   },
+   "test_global": {
+    "micro_ap": 0.43421439730417477,
+    "micro_auc": 0.7373979109755758,
+    "macro_ap": 0.3344825684676782,
+    "macro_auc": 0.6430865300940423
+   },
+   "min": 1.7847785313924154
+  },
+  {
+   "round": 1,
+   "rho_t": 1.0,
+   "delta_t": 0.4,
+   "val": {
+    "micro_ap": 0.4493513591106869,
+    "micro_auc": 0.7464672028571845,
+    "macro_ap": 0.36484468255056063,
+    "macro_auc": 0.6645333031811066
+   },
+   "test_personalized": {
+    "micro_ap": 0.45149005753673854,
+    "micro_auc": 0.7450168607050881,
+    "macro_ap": 0.3635879602401072,
+    "macro_auc": 0.6585765343741402
+   },
+   "test_global": {
+    "micro_ap": 0.4508123824329217,
+    "micro_auc": 0.7449215444162756,
+    "macro_ap": 0.35215115581920936,
+    "macro_auc": 0.6588498861072218
+   },
+   "min": 3.546826465924581
+  },
+  {
+   "round": 2,
+   "rho_t": 1.0,
+   "delta_t": 0.6,
+   "val": {
+    "micro_ap": 0.4442857953672842,
+    "micro_auc": 0.7420964647585149,
+    "macro_ap": 0.36610907333566567,
+    "macro_auc": 0.6657641446840814
+   },
+   "test_personalized": {
+    "micro_ap": 0.4411669861076198,
+    "micro_auc": 0.7380969888325439,
+    "macro_ap": 0.3589390929243938,
+    "macro_auc": 0.6556172466157019
+   },
+   "test_global": {
+    "micro_ap": 0.44050449954632276,
+    "micro_auc": 0.7381065669992007,
+    "macro_ap": 0.34711692799219795,
+    "macro_auc": 0.6554687979744623
+   },
+   "min": 5.310064180692037
+  },
+  {
+   "round": 3,
+   "rho_t": 1.0,
+   "delta_t": 0.8,
+   "val": {
+    "micro_ap": 0.4321632185147668,
+    "micro_auc": 0.7355858183897062,
+    "macro_ap": 0.35990925077965374,
+    "macro_auc": 0.6619419938296005
+   },
+   "test_personalized": {
+    "micro_ap": 0.4294488350650019,
+    "micro_auc": 0.7323426100987607,
+    "macro_ap": 0.3539807458060188,
+    "macro_auc": 0.6520126058644792
+   },
+   "test_global": {
+    "micro_ap": 0.4287274980791529,
+    "micro_auc": 0.7323552120030082,
+    "macro_ap": 0.3422027638639134,
+    "macro_auc": 0.6518296775980355
+   },
+   "min": 7.073645381132762
+  },
+  {
+   "round": 4,
+   "rho_t": 1.0,
+   "delta_t": 1.0,
+   "val": {
+    "micro_ap": 0.4183017498674981,
+    "micro_auc": 0.7262284352202958,
+    "macro_ap": 0.35637178174974726,
+    "macro_auc": 0.6565457025305489
+   },
+   "test_personalized": {
+    "micro_ap": 0.41284386251983546,
+    "micro_auc": 0.7204224415671273,
+    "macro_ap": 0.34749862062728243,
+    "macro_auc": 0.6451554783743315
+   },
+   "test_global": {
+    "micro_ap": 0.4120885080643105,
+    "micro_auc": 0.720416803944631,
+    "macro_ap": 0.33594282052984575,
+    "macro_auc": 0.6451834447814894
+   },
+   "min": 8.839465169111888
+  }
+ ],
+ "best": {
+  "val": 0.4493513591106869,
+  "round": 1,
+  "test_personalized": {
+   "micro_ap": 0.45149005753673854,
+   "micro_auc": 0.7450168607050881,
+   "macro_ap": 0.3635879602401072,
+   "macro_auc": 0.6585765343741402
+  },
+  "test_global": {
+   "micro_ap": 0.4508123824329217,
+   "micro_auc": 0.7449215444162756,
+   "macro_ap": 0.35215115581920936,
+   "macro_auc": 0.6588498861072218
+  }
+ }
+}

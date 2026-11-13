@@ -1,0 +1,84 @@
+{
+ "config": {
+  "task": "ihm",
+  "method": "fedprox",
+  "seed": 42,
+  "num_clients": 2,
+  "dir_alpha": 0.5,
+  "rounds": 2,
+  "local_epochs": 1,
+  "q": 0.5,
+  "mask_seed": 42,
+  "partition_seed": 42,
+  "embed_dim": 128,
+  "embed_time": 64,
+  "num_heads": 8,
+  "layers": 3,
+  "dropout": 0.1,
+  "lr": 0.0004,
+  "batch_size": 32,
+  "mu": 0.01,
+  "lambda_align": 0.5,
+  "lambda_reg": 0.001,
+  "xi": 0.5,
+  "rho0": 0.6,
+  "delta0": 0.2,
+  "device": "mps",
+  "smoke": true,
+  "data_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/data",
+  "out_dir": "/Volumes/TiPlus7100s/\u8bba\u6587/fedpt/FedCMA/runs",
+  "tt_max": 48,
+  "num_out": 2,
+  "d_ts": 17
+ },
+ "history": [
+  {
+   "round": 0,
+   "rho_t": 1.0,
+   "delta_t": 0.2,
+   "val": {
+    "auc": 0.711802635267732,
+    "auprc": 0.3474838303575061
+   },
+   "test_personalized": {
+    "auc": 0.6403364887816133,
+    "auprc": 0.2570300663094092
+   },
+   "test_global": {
+    "auc": 0.6406311712469264,
+    "auprc": 0.2539841319697977
+   },
+   "min": 0.6315226475397746
+  },
+  {
+   "round": 1,
+   "rho_t": 1.0,
+   "delta_t": 1.0,
+   "val": {
+    "auc": 0.7299317820764414,
+    "auprc": 0.3575099778852902
+   },
+   "test_personalized": {
+    "auc": 0.6641446284281427,
+    "auprc": 0.28259641642609423
+   },
+   "test_global": {
+    "auc": 0.6643733516798531,
+    "auprc": 0.28150721451494853
+   },
+   "min": 1.3335538347562155
+  }
+ ],
+ "best": {
+  "val": 0.3575099778852902,
+  "round": 1,
+  "test_personalized": {
+   "auc": 0.6641446284281427,
+   "auprc": 0.28259641642609423
+  },
+  "test_global": {
+   "auc": 0.6643733516798531,
+   "auprc": 0.28150721451494853
+  }
+ }
+}
