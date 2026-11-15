@@ -5,3 +5,5 @@ __pycache__/
 .pytest_cache/
 experiments/
 *.pt
+runs_repro/b3main/data/
+runs_repro/b3main/*_s*/

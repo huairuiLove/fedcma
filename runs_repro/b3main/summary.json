@@ -1,0 +1,32 @@
+[
+  {
+    "method": "fedavg",
+    "n_seeds": 3,
+    "metric_set": "test_global",
+    "auc_mean": 0.7269362585840055,
+    "auc_std": 0.010792718019278424,
+    "auprc_mean": 0.3198137152869489,
+    "auprc_std": 0.010103183568657434,
+    "seconds_mean": 14.977812944368148
+  },
+  {
+    "method": "fedprox",
+    "n_seeds": 3,
+    "metric_set": "test_global",
+    "auc_mean": 0.7149303299400764,
+    "auc_std": 0.011765320017361131,
+    "auprc_mean": 0.32845633593399753,
+    "auprc_std": 0.010111374112324226,
+    "seconds_mean": 16.358996180972706
+  },
+  {
+    "method": "fedcma",
+    "n_seeds": 3,
+    "metric_set": "test_global",
+    "auc_mean": 0.7416028573005984,
+    "auc_std": 0.014225783808584365,
+    "auprc_mean": 0.34985703795940243,
+    "auprc_std": 0.0044251638737778315,
+    "seconds_mean": 16.99298869422637
+  }
+]

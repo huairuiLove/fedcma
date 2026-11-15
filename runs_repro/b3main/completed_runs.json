@@ -1,0 +1,668 @@
+[
+  {
+    "method": "fedavg",
+    "components": {
+      "prior": false,
+      "curriculum": false,
+      "proximal": false
+    },
+    "seed": 42,
+    "best_round": 4,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7154938790767219,
+      "auprc": 0.3250184437982471,
+      "bce": 0.48951886854617715,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 305154,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 0,
+      "selection_seconds": 7.66548328101635e-06,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7390717170558931,
+      "auprc": 0.32683952391017623,
+      "bce": 0.510741439334314,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7835933949401607,
+        "auprc": 0.35092920779395487,
+        "bce": 0.492989611985986,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.7017232510288066,
+        "auprc": 0.3198321908537607,
+        "bce": 0.5284619030300829,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.595734126984127,
+        "auprc": 0.20737030212980354,
+        "bce": 0.6852432037603757,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8195335900727428,
+        "auprc": 0.4821981935636733,
+        "bce": 0.37278469596690506,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7390717170558931,
+      "auprc": 0.32683952391017623,
+      "bce": 0.510741439334314,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 14.831879375036806,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedprox",
+    "components": {
+      "prior": false,
+      "curriculum": false,
+      "proximal": true
+    },
+    "seed": 42,
+    "best_round": 5,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7323147369404729,
+      "auprc": 0.3310699439396909,
+      "bce": 0.4883143216208372,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 305154,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 0,
+      "selection_seconds": 6.4123887568712234e-06,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7020792722547108,
+      "auprc": 0.31830240498022205,
+      "bce": 0.5329875281962208,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7733424228652225,
+        "auprc": 0.37560122560944875,
+        "bce": 0.4583743266429707,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.6431584362139917,
+        "auprc": 0.2899456413240276,
+        "bce": 0.6074689043050303,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.5656746031746032,
+        "auprc": 0.1938083679121671,
+        "bce": 0.8229194049772642,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8169661959777492,
+        "auprc": 0.44831295340392174,
+        "bce": 0.39353566067978396,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7020792722547108,
+      "auprc": 0.31830240498022205,
+      "bce": 0.5329875281962208,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 16.21023829188198,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedcma",
+    "components": {
+      "prior": true,
+      "curriculum": true,
+      "proximal": false
+    },
+    "seed": 42,
+    "best_round": 3,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7420801794224838,
+      "auprc": 0.35716420778153896,
+      "bce": 0.40571805737431593,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 338306,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 6144,
+      "selection_seconds": 0.9950672504492104,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7540355973448509,
+      "auprc": 0.3547197077221601,
+      "bce": 0.4295398023838265,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7757662980356511,
+        "auprc": 0.354037013108429,
+        "bce": 0.41767112846179544,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.7266203703703704,
+        "auprc": 0.3541250729131217,
+        "bce": 0.4413875069173027,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.6000992063492063,
+        "auprc": 0.22069113371696636,
+        "bce": 0.5380441132682168,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8373983739837398,
+        "auprc": 0.4995144636368521,
+        "bce": 0.34541158089280366,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7544178165093197,
+      "auprc": 0.35266713602726907,
+      "bce": 0.42928355808811225,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 16.8966648329515,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedavg",
+    "components": {
+      "prior": false,
+      "curriculum": false,
+      "proximal": false
+    },
+    "seed": 43,
+    "best_round": 3,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7430146715260256,
+      "auprc": 0.3442210942809544,
+      "bce": 0.41176473012529713,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 305154,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 0,
+      "selection_seconds": 6.252434104681015e-06,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7184127712163488,
+      "auprc": 0.32436634431878675,
+      "bce": 0.45542581160163825,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7671817401403828,
+        "auprc": 0.3571982937001145,
+        "bce": 0.4245551953844403,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.6661522633744855,
+        "auprc": 0.30421361618611137,
+        "bce": 0.4862418860940707,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.5169642857142858,
+        "auprc": 0.18282682264154163,
+        "bce": 0.62266366659721,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8111895592640136,
+        "auprc": 0.48420860433488117,
+        "bce": 0.35078082235503827,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7184127712163488,
+      "auprc": 0.32436634431878675,
+      "bce": 0.45542581160163825,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 15.016724542016163,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedprox",
+    "components": {
+      "prior": false,
+      "curriculum": false,
+      "proximal": true
+    },
+    "seed": 43,
+    "best_round": 3,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.756284459396318,
+      "auprc": 0.35682644874250913,
+      "bce": 0.40303715440190924,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 305154,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 0,
+      "selection_seconds": 7.292954251170158e-06,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7175400374574781,
+      "auprc": 0.33852460896290515,
+      "bce": 0.45245450580606866,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7746048578498207,
+        "auprc": 0.3725569874317726,
+        "bce": 0.4171187007217329,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.6565329218106996,
+        "auprc": 0.326165358299154,
+        "bce": 0.48772788013937196,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.5094246031746031,
+        "auprc": 0.19273322336455043,
+        "bce": 0.6360110832934259,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8179289687633718,
+        "auprc": 0.5073850590498529,
+        "bce": 0.3404889248948538,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7175400374574781,
+      "auprc": 0.33852460896290515,
+      "bce": 0.45245450580606866,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 16.325780709041283,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedcma",
+    "components": {
+      "prior": true,
+      "curriculum": true,
+      "proximal": false
+    },
+    "seed": 43,
+    "best_round": 3,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7439491636295673,
+      "auprc": 0.34527290538804184,
+      "bce": 0.3903478130562783,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 338306,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 6144,
+      "selection_seconds": 0.9958367473445833,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7260890061027659,
+      "auprc": 0.3460663255022338,
+      "bce": 0.42677402373250706,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7654395798616371,
+        "auprc": 0.3425296499935016,
+        "bce": 0.41059193326558857,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.6786779835390946,
+        "auprc": 0.3516922329735507,
+        "bce": 0.4429275239335829,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.5496031746031746,
+        "auprc": 0.2029398142860539,
+        "bce": 0.5514792649684832,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8290543431750107,
+        "auprc": 0.4983137419875003,
+        "bce": 0.33514023177921026,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7254264928843532,
+      "auprc": 0.3466015710686644,
+      "bce": 0.42699642161973117,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 16.933686916949227,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedavg",
+    "components": {
+      "prior": false,
+      "curriculum": false,
+      "proximal": false
+    },
+    "seed": 44,
+    "best_round": 5,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7265208858985142,
+      "auprc": 0.3353173620829157,
+      "bce": 0.4672890882320954,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 305154,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 0,
+      "selection_seconds": 6.8303197622299194e-06,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7233242874797742,
+      "auprc": 0.30823527763188374,
+      "bce": 0.5176999458191486,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7729889410695349,
+        "auprc": 0.33801383690164893,
+        "bce": 0.47693760292160825,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.6718878600823046,
+        "auprc": 0.2870882413723844,
+        "bce": 0.5583902704430183,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.5505952380952381,
+        "auprc": 0.16662024237327955,
+        "bce": 0.7551344350597785,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8180359435173299,
+        "auprc": 0.4935993026334878,
+        "bce": 0.36303162811229167,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7233242874797742,
+      "auprc": 0.30823527763188374,
+      "bce": 0.5176999458191486,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 15.084834916051477,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedprox",
+    "components": {
+      "prior": false,
+      "curriculum": false,
+      "proximal": true
+    },
+    "seed": 44,
+    "best_round": 5,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7400710213998692,
+      "auprc": 0.35574589480621693,
+      "bce": 0.4756227500293256,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 305154,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 0,
+      "selection_seconds": 6.710179150104523e-06,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7251716801080406,
+      "auprc": 0.32854199385886546,
+      "bce": 0.508812025635949,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.7908397717517547,
+        "auprc": 0.36574491830586797,
+        "bce": 0.4387816718300298,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.6719907407407407,
+        "auprc": 0.30261498400833264,
+        "bce": 0.5787186509015747,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.5787698412698412,
+        "auprc": 0.1838018959287033,
+        "bce": 0.7640663477333375,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8075524176294394,
+        "auprc": 0.4955539284817922,
+        "bce": 0.3946762195404583,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7251716801080406,
+      "auprc": 0.32854199385886546,
+      "bce": 0.508812025635949,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 16.540969541994855,
+    "peak_cuda_allocated_mb": null
+  },
+  {
+    "method": "fedcma",
+    "components": {
+      "prior": true,
+      "curriculum": true,
+      "proximal": false
+    },
+    "seed": 44,
+    "best_round": 4,
+    "selection_metric": "global_validation_average_precision",
+    "best_validation": {
+      "auc": 0.7330623306233062,
+      "auprc": 0.3500188821269414,
+      "bce": 0.4556932324159423,
+      "n": 427,
+      "positives": 58
+    },
+    "trainable_parameters": 338306,
+    "validation_only": false,
+    "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5",
+    "training_budget": {
+      "examples_processed": 46080,
+      "optimizer_steps": 750,
+      "selection_examples_scored": 6144,
+      "selection_seconds": 1.007455832324922,
+      "equal_training_budget": true
+    },
+    "test_global": {
+      "auc": 0.7446839684541783,
+      "auprc": 0.34878508065381336,
+      "bce": 0.4811254142992019,
+      "n": 1131,
+      "positives": 162
+    },
+    "test_subgroups": {
+      "complete": {
+        "auc": 0.78551229611675,
+        "auprc": 0.3660363232034663,
+        "bce": 0.4577458944836716,
+        "n": 565,
+        "positives": 82
+      },
+      "incomplete": {
+        "auc": 0.6986111111111111,
+        "auprc": 0.3260972167973633,
+        "bce": 0.50446362754262,
+        "n": 566,
+        "positives": 80
+      },
+      "ts_missing": {
+        "auc": 0.5700396825396825,
+        "auprc": 0.179292189780677,
+        "bce": 0.626295715564958,
+        "n": 282,
+        "positives": 42
+      },
+      "text_missing": {
+        "auc": 0.8326914848095849,
+        "auprc": 0.5029235918493741,
+        "bce": 0.3834895119711436,
+        "n": 284,
+        "positives": 38
+      }
+    },
+    "test_personalized_pooled": {
+      "auc": 0.7450916688962785,
+      "auprc": 0.34927592563907517,
+      "bce": 0.4808995682135741,
+      "n": 1131,
+      "positives": 162
+    },
+    "elapsed_seconds": 17.14861433277838,
+    "peak_cuda_allocated_mb": null
+  }
+]

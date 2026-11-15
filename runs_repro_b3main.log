@@ -1,0 +1,321 @@
+{'train': {'n': 3072, 'positives': 496, 'mask_counts': {'complete': 1536, 'ts_missing': 759, 'text_missing': 777}, 'clients': [{'client': 0, 'n': 529, 'positives': 81}, {'client': 1, 'n': 876, 'positives': 38}, {'client': 2, 'n': 546, 'positives': 54}, {'client': 3, 'n': 806, 'positives': 30}, {'client': 4, 'n': 315, 'positives': 293}]}, 'val': {'n': 427, 'positives': 58, 'mask_counts': {'complete': 213, 'ts_missing': 115, 'text_missing': 99}, 'clients': [{'client': 0, 'n': 66, 'positives': 7}, {'client': 1, 'n': 120, 'positives': 16}, {'client': 2, 'n': 72, 'positives': 8}, {'client': 3, 'n': 118, 'positives': 20}, {'client': 4, 'n': 51, 'positives': 7}]}, 'test': {'n': 1131, 'positives': 162, 'mask_counts': {'complete': 565, 'ts_missing': 282, 'text_missing': 284}, 'clients': [{'client': 0, 'n': 197, 'positives': 30}, {'client': 1, 'n': 315, 'positives': 44}, {'client': 2, 'n': 234, 'positives': 33}, {'client': 3, 'n': 281, 'positives': 37}, {'client': 4, 'n': 104, 'positives': 18}]}}
+2026-11-15T08:00:30.626933+00:00 method=fedavg seed=42 train=3072 parameters=305154
+2026-11-15T08:00:31.148122+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:00:31.957910+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:00:32.476908+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:00:33.229381+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:00:33.524315+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:00:33.599062+00:00 round=1 loss=0.26272 val_auc=0.68386 val_ap=0.25018 elapsed=3.0s
+2026-11-15T08:00:34.096624+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:00:34.904379+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:00:35.408710+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:00:36.152418+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:00:36.442916+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:00:36.513406+00:00 round=2 loss=0.24895 val_auc=0.73017 val_ap=0.30315 elapsed=5.9s
+2026-11-15T08:00:37.012122+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:00:37.826698+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:00:38.332639+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:00:39.071401+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:00:39.361960+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:00:39.431512+00:00 round=3 loss=0.17349 val_auc=0.71933 val_ap=0.31508 elapsed=8.8s
+2026-11-15T08:00:39.931586+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:00:40.742324+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:00:41.255903+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:00:42.015695+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:00:42.307259+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:00:42.378414+00:00 round=4 loss=0.16552 val_auc=0.71549 val_ap=0.32502 elapsed=11.7s
+2026-11-15T08:00:42.878883+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:00:43.688126+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:00:44.195744+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:00:44.944772+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:00:45.236561+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:00:45.306033+00:00 round=5 loss=0.14299 val_auc=0.70400 val_ap=0.31174 elapsed=14.7s
+2026-11-15T08:00:45.459041+00:00 COMPLETED {"method": "fedavg", "components": {"prior": false, "curriculum": false, "proximal": false}, "seed": 42, "best_round": 4, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7154938790767219, "auprc": 0.3250184437982471, "bce": 0.48951886854617715, "n": 427, "positives": 58}, "trainable_parameters": 305154, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 0, "selection_seconds": 7.66548328101635e-06, "equal_training_budget": true}, "test_global": {"auc": 0.7390717170558931, "auprc": 0.32683952391017623, "bce": 0.510741439334314, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7835933949401607, "auprc": 0.35092920779395487, "bce": 0.492989611985986, "n": 565, "positives": 82}, "incomplete": {"auc": 0.7017232510288066, "auprc": 0.3198321908537607, "bce": 0.5284619030300829, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.595734126984127, "auprc": 0.20737030212980354, "bce": 0.6852432037603757, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8195335900727428, "auprc": 0.4821981935636733, "bce": 0.37278469596690506, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7390717170558931, "auprc": 0.32683952391017623, "bce": 0.510741439334314, "n": 1131, "positives": 162}, "elapsed_seconds": 14.831879375036806, "peak_cuda_allocated_mb": null}
+2026-11-15T08:00:45.733062+00:00 method=fedprox seed=42 train=3072 parameters=305154
+2026-11-15T08:00:46.286826+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:00:47.179552+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:00:47.727691+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:00:48.538552+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:00:48.860092+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:00:48.965436+00:00 round=1 loss=0.28511 val_auc=0.69671 val_ap=0.26042 elapsed=3.2s
+2026-11-15T08:00:49.511560+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:00:50.386091+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:00:50.934358+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:00:51.734935+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:00:52.047216+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:00:52.152866+00:00 round=2 loss=0.25722 val_auc=0.71881 val_ap=0.30121 elapsed=6.4s
+2026-11-15T08:00:52.703027+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:00:53.585152+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:00:54.138444+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:00:54.996251+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:00:55.315355+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:00:55.420754+00:00 round=3 loss=0.19291 val_auc=0.71475 val_ap=0.31046 elapsed=9.6s
+2026-11-15T08:00:55.958483+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:00:56.830521+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:00:57.380251+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:00:58.189231+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:00:58.502486+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:00:58.608327+00:00 round=4 loss=0.18087 val_auc=0.72998 val_ap=0.31981 elapsed=12.8s
+2026-11-15T08:00:59.147080+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:01:00.013333+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:01:00.562600+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:01:01.366720+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:01:01.678774+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:01:01.784056+00:00 round=5 loss=0.15846 val_auc=0.73231 val_ap=0.33107 elapsed=16.0s
+2026-11-15T08:01:01.943528+00:00 COMPLETED {"method": "fedprox", "components": {"prior": false, "curriculum": false, "proximal": true}, "seed": 42, "best_round": 5, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7323147369404729, "auprc": 0.3310699439396909, "bce": 0.4883143216208372, "n": 427, "positives": 58}, "trainable_parameters": 305154, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 0, "selection_seconds": 6.4123887568712234e-06, "equal_training_budget": true}, "test_global": {"auc": 0.7020792722547108, "auprc": 0.31830240498022205, "bce": 0.5329875281962208, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7733424228652225, "auprc": 0.37560122560944875, "bce": 0.4583743266429707, "n": 565, "positives": 82}, "incomplete": {"auc": 0.6431584362139917, "auprc": 0.2899456413240276, "bce": 0.6074689043050303, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.5656746031746032, "auprc": 0.1938083679121671, "bce": 0.8229194049772642, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8169661959777492, "auprc": 0.44831295340392174, "bce": 0.39353566067978396, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7020792722547108, "auprc": 0.31830240498022205, "bce": 0.5329875281962208, "n": 1131, "positives": 162}, "elapsed_seconds": 16.21023829188198, "peak_cuda_allocated_mb": null}
+2026-11-15T08:01:02.223467+00:00 method=fedcma seed=42 train=3072 parameters=338306
+2026-11-15T08:01:02.758961+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:01:03.608007+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:01:04.135650+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:01:04.925141+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:01:05.236025+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:01:05.338381+00:00 round=1 loss=0.38010 val_auc=0.67036 val_ap=0.24899 elapsed=3.1s
+2026-11-15T08:01:05.961627+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:01:06.957790+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:01:07.579665+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:01:08.489274+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:01:08.852503+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:01:08.957967+00:00 round=2 loss=0.33810 val_auc=0.72811 val_ap=0.33510 elapsed=6.7s
+2026-11-15T08:01:09.578648+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:01:10.573198+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:01:11.190337+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:01:12.095850+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:01:12.454062+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:01:12.559802+00:00 round=3 loss=0.22591 val_auc=0.74208 val_ap=0.35716 elapsed=10.3s
+2026-11-15T08:01:13.086408+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:01:13.941658+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:01:14.477745+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:01:15.258222+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:01:15.565851+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:01:15.668782+00:00 round=4 loss=0.19639 val_auc=0.74512 val_ap=0.34259 elapsed=13.4s
+2026-11-15T08:01:16.199942+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:01:17.065153+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:01:17.617977+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:01:18.403983+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:01:18.710767+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:01:18.814143+00:00 round=5 loss=0.17200 val_auc=0.72783 val_ap=0.31689 elapsed=16.5s
+2026-11-15T08:01:19.120529+00:00 COMPLETED {"method": "fedcma", "components": {"prior": true, "curriculum": true, "proximal": false}, "seed": 42, "best_round": 3, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7420801794224838, "auprc": 0.35716420778153896, "bce": 0.40571805737431593, "n": 427, "positives": 58}, "trainable_parameters": 338306, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 6144, "selection_seconds": 0.9950672504492104, "equal_training_budget": true}, "test_global": {"auc": 0.7540355973448509, "auprc": 0.3547197077221601, "bce": 0.4295398023838265, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7757662980356511, "auprc": 0.354037013108429, "bce": 0.41767112846179544, "n": 565, "positives": 82}, "incomplete": {"auc": 0.7266203703703704, "auprc": 0.3541250729131217, "bce": 0.4413875069173027, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.6000992063492063, "auprc": 0.22069113371696636, "bce": 0.5380441132682168, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8373983739837398, "auprc": 0.4995144636368521, "bce": 0.34541158089280366, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7544178165093197, "auprc": 0.35266713602726907, "bce": 0.42928355808811225, "n": 1131, "positives": 162}, "elapsed_seconds": 16.8966648329515, "peak_cuda_allocated_mb": null}
+2026-11-15T08:01:19.401702+00:00 method=fedavg seed=43 train=3072 parameters=305154
+2026-11-15T08:01:19.908927+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:01:20.729144+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:01:21.245674+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:01:22.001338+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:01:22.297157+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:01:22.374526+00:00 round=1 loss=0.27287 val_auc=0.68594 val_ap=0.28428 elapsed=3.0s
+2026-11-15T08:01:22.880096+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:01:23.700555+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:01:24.208677+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:01:24.959496+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:01:25.254194+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:01:25.327279+00:00 round=2 loss=0.25556 val_auc=0.72007 val_ap=0.31055 elapsed=5.9s
+2026-11-15T08:01:25.834527+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:01:26.686387+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:01:27.212271+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:01:27.960957+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:01:28.254572+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:01:28.324559+00:00 round=3 loss=0.18256 val_auc=0.74301 val_ap=0.34422 elapsed=8.9s
+2026-11-15T08:01:28.829039+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:01:29.651508+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:01:30.181547+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:01:30.942672+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:01:31.233691+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:01:31.301697+00:00 round=4 loss=0.17504 val_auc=0.71489 val_ap=0.30894 elapsed=11.9s
+2026-11-15T08:01:31.801032+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:01:32.616778+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:01:33.138025+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:01:33.894879+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:01:34.192407+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:01:34.260761+00:00 round=5 loss=0.14606 val_auc=0.74311 val_ap=0.32015 elapsed=14.8s
+2026-11-15T08:01:34.418989+00:00 COMPLETED {"method": "fedavg", "components": {"prior": false, "curriculum": false, "proximal": false}, "seed": 43, "best_round": 3, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7430146715260256, "auprc": 0.3442210942809544, "bce": 0.41176473012529713, "n": 427, "positives": 58}, "trainable_parameters": 305154, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 0, "selection_seconds": 6.252434104681015e-06, "equal_training_budget": true}, "test_global": {"auc": 0.7184127712163488, "auprc": 0.32436634431878675, "bce": 0.45542581160163825, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7671817401403828, "auprc": 0.3571982937001145, "bce": 0.4245551953844403, "n": 565, "positives": 82}, "incomplete": {"auc": 0.6661522633744855, "auprc": 0.30421361618611137, "bce": 0.4862418860940707, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.5169642857142858, "auprc": 0.18282682264154163, "bce": 0.62266366659721, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8111895592640136, "auprc": 0.48420860433488117, "bce": 0.35078082235503827, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7184127712163488, "auprc": 0.32436634431878675, "bce": 0.45542581160163825, "n": 1131, "positives": 162}, "elapsed_seconds": 15.016724542016163, "peak_cuda_allocated_mb": null}
+2026-11-15T08:01:34.695751+00:00 method=fedprox seed=43 train=3072 parameters=305154
+2026-11-15T08:01:35.242666+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:01:36.114522+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:01:36.676972+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:01:37.501018+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:01:37.820932+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:01:37.926829+00:00 round=1 loss=0.29645 val_auc=0.70115 val_ap=0.29934 elapsed=3.2s
+2026-11-15T08:01:38.470859+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:01:39.349065+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:01:39.904971+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:01:40.722738+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:01:41.043802+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:01:41.145830+00:00 round=2 loss=0.25337 val_auc=0.73152 val_ap=0.31751 elapsed=6.4s
+2026-11-15T08:01:41.693285+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:01:42.592974+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:01:43.174675+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:01:43.996951+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:01:44.314915+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:01:44.420321+00:00 round=3 loss=0.19728 val_auc=0.75628 val_ap=0.35683 elapsed=9.7s
+2026-11-15T08:01:44.971757+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:01:45.857072+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:01:46.410622+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:01:47.225559+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:01:47.541136+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:01:47.644419+00:00 round=4 loss=0.18811 val_auc=0.72442 val_ap=0.29643 elapsed=12.9s
+2026-11-15T08:01:48.190443+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:01:49.072813+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:01:49.629018+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:01:50.441524+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:01:50.760062+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:01:50.860834+00:00 round=5 loss=0.15843 val_auc=0.74049 val_ap=0.30738 elapsed=16.1s
+2026-11-15T08:01:51.021862+00:00 COMPLETED {"method": "fedprox", "components": {"prior": false, "curriculum": false, "proximal": true}, "seed": 43, "best_round": 3, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.756284459396318, "auprc": 0.35682644874250913, "bce": 0.40303715440190924, "n": 427, "positives": 58}, "trainable_parameters": 305154, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 0, "selection_seconds": 7.292954251170158e-06, "equal_training_budget": true}, "test_global": {"auc": 0.7175400374574781, "auprc": 0.33852460896290515, "bce": 0.45245450580606866, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7746048578498207, "auprc": 0.3725569874317726, "bce": 0.4171187007217329, "n": 565, "positives": 82}, "incomplete": {"auc": 0.6565329218106996, "auprc": 0.326165358299154, "bce": 0.48772788013937196, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.5094246031746031, "auprc": 0.19273322336455043, "bce": 0.6360110832934259, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8179289687633718, "auprc": 0.5073850590498529, "bce": 0.3404889248948538, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7175400374574781, "auprc": 0.33852460896290515, "bce": 0.45245450580606866, "n": 1131, "positives": 162}, "elapsed_seconds": 16.325780709041283, "peak_cuda_allocated_mb": null}
+2026-11-15T08:01:51.296648+00:00 method=fedcma seed=43 train=3072 parameters=338306
+2026-11-15T08:01:51.829108+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:01:52.679822+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:01:53.216015+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:01:54.006201+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:01:54.314552+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:01:54.416840+00:00 round=1 loss=0.38952 val_auc=0.67405 val_ap=0.28238 elapsed=3.1s
+2026-11-15T08:01:55.038815+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:01:56.033934+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:01:56.671150+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:01:57.590326+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:01:57.952568+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:01:58.058210+00:00 round=2 loss=0.33664 val_auc=0.72386 val_ap=0.31457 elapsed=6.7s
+2026-11-15T08:01:58.678077+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:01:59.665767+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:02:00.292344+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:02:01.215637+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:02:01.580708+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:02:01.685972+00:00 round=3 loss=0.22386 val_auc=0.74395 val_ap=0.34527 elapsed=10.3s
+2026-11-15T08:02:02.216026+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:02:03.064358+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:02:03.595040+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:02:04.383052+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:02:04.694583+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:02:04.797812+00:00 round=4 loss=0.20787 val_auc=0.70498 val_ap=0.29497 elapsed=13.5s
+2026-11-15T08:02:05.327904+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:02:06.184549+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:02:06.725840+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:02:07.503650+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:02:07.814461+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:02:07.925842+00:00 round=5 loss=0.17676 val_auc=0.71503 val_ap=0.30354 elapsed=16.6s
+2026-11-15T08:02:08.230624+00:00 COMPLETED {"method": "fedcma", "components": {"prior": true, "curriculum": true, "proximal": false}, "seed": 43, "best_round": 3, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7439491636295673, "auprc": 0.34527290538804184, "bce": 0.3903478130562783, "n": 427, "positives": 58}, "trainable_parameters": 338306, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 6144, "selection_seconds": 0.9958367473445833, "equal_training_budget": true}, "test_global": {"auc": 0.7260890061027659, "auprc": 0.3460663255022338, "bce": 0.42677402373250706, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7654395798616371, "auprc": 0.3425296499935016, "bce": 0.41059193326558857, "n": 565, "positives": 82}, "incomplete": {"auc": 0.6786779835390946, "auprc": 0.3516922329735507, "bce": 0.4429275239335829, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.5496031746031746, "auprc": 0.2029398142860539, "bce": 0.5514792649684832, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8290543431750107, "auprc": 0.4983137419875003, "bce": 0.33514023177921026, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7254264928843532, "auprc": 0.3466015710686644, "bce": 0.42699642161973117, "n": 1131, "positives": 162}, "elapsed_seconds": 16.933686916949227, "peak_cuda_allocated_mb": null}
+2026-11-15T08:02:08.506590+00:00 method=fedavg seed=44 train=3072 parameters=305154
+2026-11-15T08:02:09.037789+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:02:09.871950+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:02:10.391688+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:02:11.149304+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:02:11.447218+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:02:11.522155+00:00 round=1 loss=0.28876 val_auc=0.70106 val_ap=0.32295 elapsed=3.0s
+2026-11-15T08:02:12.029955+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:02:12.854082+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:02:13.372424+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:02:14.129244+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:02:14.425703+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:02:14.499150+00:00 round=2 loss=0.25533 val_auc=0.71624 val_ap=0.31282 elapsed=6.0s
+2026-11-15T08:02:15.004866+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:02:15.829188+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:02:16.345309+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:02:17.106741+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:02:17.401663+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:02:17.475486+00:00 round=3 loss=0.19774 val_auc=0.74091 val_ap=0.33190 elapsed=9.0s
+2026-11-15T08:02:17.983503+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:02:18.810861+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:02:19.329944+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:02:20.080984+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:02:20.376312+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:02:20.445900+00:00 round=4 loss=0.17315 val_auc=0.72736 val_ap=0.32351 elapsed=11.9s
+2026-11-15T08:02:20.953549+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:02:21.788902+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:02:22.310166+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:02:23.065786+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:02:23.362039+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:02:23.433371+00:00 round=5 loss=0.15024 val_auc=0.72652 val_ap=0.33532 elapsed=14.9s
+2026-11-15T08:02:23.591721+00:00 COMPLETED {"method": "fedavg", "components": {"prior": false, "curriculum": false, "proximal": false}, "seed": 44, "best_round": 5, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7265208858985142, "auprc": 0.3353173620829157, "bce": 0.4672890882320954, "n": 427, "positives": 58}, "trainable_parameters": 305154, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 0, "selection_seconds": 6.8303197622299194e-06, "equal_training_budget": true}, "test_global": {"auc": 0.7233242874797742, "auprc": 0.30823527763188374, "bce": 0.5176999458191486, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7729889410695349, "auprc": 0.33801383690164893, "bce": 0.47693760292160825, "n": 565, "positives": 82}, "incomplete": {"auc": 0.6718878600823046, "auprc": 0.2870882413723844, "bce": 0.5583902704430183, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.5505952380952381, "auprc": 0.16662024237327955, "bce": 0.7551344350597785, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8180359435173299, "auprc": 0.4935993026334878, "bce": 0.36303162811229167, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7233242874797742, "auprc": 0.30823527763188374, "bce": 0.5176999458191486, "n": 1131, "positives": 162}, "elapsed_seconds": 15.084834916051477, "peak_cuda_allocated_mb": null}
+2026-11-15T08:02:23.870095+00:00 method=fedprox seed=44 train=3072 parameters=305154
+2026-11-15T08:02:24.418888+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:02:25.309914+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:02:25.873009+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:02:26.690901+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:02:27.004965+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:02:27.110624+00:00 round=1 loss=0.31549 val_auc=0.69830 val_ap=0.31758 elapsed=3.2s
+2026-11-15T08:02:27.655278+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:02:28.540912+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:02:29.099534+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:02:29.922558+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:02:30.241736+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:02:30.311553+00:00 round=2 loss=0.25401 val_auc=0.71830 val_ap=0.31471 elapsed=6.4s
+2026-11-15T08:02:30.887696+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:02:31.772289+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:02:32.333969+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:02:33.204101+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:02:33.577355+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:02:33.682165+00:00 round=3 loss=0.21061 val_auc=0.74909 val_ap=0.32551 elapsed=9.8s
+2026-11-15T08:02:34.303654+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:02:35.189065+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:02:35.752476+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:02:36.572797+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:02:36.893735+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:02:37.008622+00:00 round=4 loss=0.18268 val_auc=0.74147 val_ap=0.33278 elapsed=13.1s
+2026-11-15T08:02:37.556236+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:02:38.433886+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:02:38.997510+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:02:39.819280+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:02:40.137992+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:02:40.254024+00:00 round=5 loss=0.16104 val_auc=0.74007 val_ap=0.35575 elapsed=16.3s
+2026-11-15T08:02:40.411334+00:00 COMPLETED {"method": "fedprox", "components": {"prior": false, "curriculum": false, "proximal": true}, "seed": 44, "best_round": 5, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7400710213998692, "auprc": 0.35574589480621693, "bce": 0.4756227500293256, "n": 427, "positives": 58}, "trainable_parameters": 305154, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 0, "selection_seconds": 6.710179150104523e-06, "equal_training_budget": true}, "test_global": {"auc": 0.7251716801080406, "auprc": 0.32854199385886546, "bce": 0.508812025635949, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.7908397717517547, "auprc": 0.36574491830586797, "bce": 0.4387816718300298, "n": 565, "positives": 82}, "incomplete": {"auc": 0.6719907407407407, "auprc": 0.30261498400833264, "bce": 0.5787186509015747, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.5787698412698412, "auprc": 0.1838018959287033, "bce": 0.7640663477333375, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8075524176294394, "auprc": 0.4955539284817922, "bce": 0.3946762195404583, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7251716801080406, "auprc": 0.32854199385886546, "bce": 0.508812025635949, "n": 1131, "positives": 162}, "elapsed_seconds": 16.540969541994855, "peak_cuda_allocated_mb": null}
+2026-11-15T08:02:40.684088+00:00 method=fedcma seed=44 train=3072 parameters=338306
+2026-11-15T08:02:41.229191+00:00 round=1 client=0 selected=529/529
+2026-11-15T08:02:42.095775+00:00 round=1 client=1 selected=876/876
+2026-11-15T08:02:42.640904+00:00 round=1 client=2 selected=546/546
+2026-11-15T08:02:43.444507+00:00 round=1 client=3 selected=806/806
+2026-11-15T08:02:43.755889+00:00 round=1 client=4 selected=315/315
+2026-11-15T08:02:43.861662+00:00 round=1 loss=0.40660 val_auc=0.67566 val_ap=0.31755 elapsed=3.1s
+2026-11-15T08:02:44.479023+00:00 round=2 client=0 selected=529/529
+2026-11-15T08:02:45.486755+00:00 round=2 client=1 selected=876/876
+2026-11-15T08:02:46.126822+00:00 round=2 client=2 selected=546/546
+2026-11-15T08:02:47.055917+00:00 round=2 client=3 selected=806/806
+2026-11-15T08:02:47.415404+00:00 round=2 client=4 selected=315/315
+2026-11-15T08:02:47.529353+00:00 round=2 loss=0.33591 val_auc=0.72082 val_ap=0.33307 elapsed=6.8s
+2026-11-15T08:02:48.154315+00:00 round=3 client=0 selected=529/529
+2026-11-15T08:02:49.178800+00:00 round=3 client=1 selected=876/876
+2026-11-15T08:02:49.821337+00:00 round=3 client=2 selected=546/546
+2026-11-15T08:02:50.754685+00:00 round=3 client=3 selected=806/806
+2026-11-15T08:02:51.114696+00:00 round=3 client=4 selected=315/315
+2026-11-15T08:02:51.229341+00:00 round=3 loss=0.23914 val_auc=0.72531 val_ap=0.33318 elapsed=10.5s
+2026-11-15T08:02:51.758663+00:00 round=4 client=0 selected=529/529
+2026-11-15T08:02:52.619197+00:00 round=4 client=1 selected=876/876
+2026-11-15T08:02:53.167066+00:00 round=4 client=2 selected=546/546
+2026-11-15T08:02:53.963130+00:00 round=4 client=3 selected=806/806
+2026-11-15T08:02:54.271896+00:00 round=4 client=4 selected=315/315
+2026-11-15T08:02:54.377712+00:00 round=4 loss=0.20787 val_auc=0.73306 val_ap=0.35002 elapsed=13.6s
+2026-11-15T08:02:54.906882+00:00 round=5 client=0 selected=529/529
+2026-11-15T08:02:55.763569+00:00 round=5 client=1 selected=876/876
+2026-11-15T08:02:56.307721+00:00 round=5 client=2 selected=546/546
+2026-11-15T08:02:57.112963+00:00 round=5 client=3 selected=806/806
+2026-11-15T08:02:57.423175+00:00 round=5 client=4 selected=315/315
+2026-11-15T08:02:57.526325+00:00 round=5 loss=0.19493 val_auc=0.72577 val_ap=0.31351 elapsed=16.8s
+2026-11-15T08:02:57.833061+00:00 COMPLETED {"method": "fedcma", "components": {"prior": true, "curriculum": true, "proximal": false}, "seed": 44, "best_round": 4, "selection_metric": "global_validation_average_precision", "best_validation": {"auc": 0.7330623306233062, "auprc": 0.3500188821269414, "bce": 0.4556932324159423, "n": 427, "positives": 58}, "trainable_parameters": 338306, "validation_only": false, "data_sha256": "b684e6097a96abab6c8eaad859b7720c14cc435f9d6691e77229b1bb43b2a3b5", "training_budget": {"examples_processed": 46080, "optimizer_steps": 750, "selection_examples_scored": 6144, "selection_seconds": 1.007455832324922, "equal_training_budget": true}, "test_global": {"auc": 0.7446839684541783, "auprc": 0.34878508065381336, "bce": 0.4811254142992019, "n": 1131, "positives": 162}, "test_subgroups": {"complete": {"auc": 0.78551229611675, "auprc": 0.3660363232034663, "bce": 0.4577458944836716, "n": 565, "positives": 82}, "incomplete": {"auc": 0.6986111111111111, "auprc": 0.3260972167973633, "bce": 0.50446362754262, "n": 566, "positives": 80}, "ts_missing": {"auc": 0.5700396825396825, "auprc": 0.179292189780677, "bce": 0.626295715564958, "n": 282, "positives": 42}, "text_missing": {"auc": 0.8326914848095849, "auprc": 0.5029235918493741, "bce": 0.3834895119711436, "n": 284, "positives": 38}}, "test_personalized_pooled": {"auc": 0.7450916688962785, "auprc": 0.34927592563907517, "bce": 0.4808995682135741, "n": 1131, "positives": 162}, "elapsed_seconds": 17.14861433277838, "peak_cuda_allocated_mb": null}
+[
+  {
+    "method": "fedavg",
+    "n_seeds": 3,
+    "metric_set": "test_global",
+    "auc_mean": 0.7269362585840055,
+    "auc_std": 0.010792718019278424,
+    "auprc_mean": 0.3198137152869489,
+    "auprc_std": 0.010103183568657434,
+    "seconds_mean": 14.977812944368148
+  },
+  {
+    "method": "fedprox",
+    "n_seeds": 3,
+    "metric_set": "test_global",
+    "auc_mean": 0.7149303299400764,
+    "auc_std": 0.011765320017361131,
+    "auprc_mean": 0.32845633593399753,
+    "auprc_std": 0.010111374112324226,
+    "seconds_mean": 16.358996180972706
+  },
+  {
+    "method": "fedcma",
+    "n_seeds": 3,
+    "metric_set": "test_global",
+    "auc_mean": 0.7416028573005984,
+    "auc_std": 0.014225783808584365,
+    "auprc_mean": 0.34985703795940243,
+    "auprc_std": 0.0044251638737778315,
+    "seconds_mean": 16.99298869422637
+  }
+]
